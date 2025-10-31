@@ -1,6 +1,5 @@
 package com.java.app.array.service;
 
-
 import com.java.app.array.entity.ArrayEntity;
 import com.java.app.array.specification.AverageGreaterThanSpecification;
 import com.java.app.array.specification.IdSpecification;

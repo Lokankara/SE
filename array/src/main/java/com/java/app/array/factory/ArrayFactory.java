@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 public class ArrayFactory {
 
     public ArrayEntity createArray(int[] array) {
-        return getArrayEntity("array", array);
+        return createArrayEntity("array", array);
     }
 
     public ArrayEntity createRandomArray(String name, int size, int min, int max) {
@@ -19,7 +19,7 @@ public class ArrayFactory {
 
         int[] array = IntStream.range(0, size).map(i -> new SecureRandom().nextInt(max - min + 1) + min).toArray();
 
-        return getArrayEntity(name, array);
+        return createArrayEntity(name, array);
     }
 
     public ArrayEntity createSequentialArray(String name, int start, int end) {
@@ -27,14 +27,14 @@ public class ArrayFactory {
         int size = Math.abs(end - start) + 1;
         int[] array = IntStream.range(0, size).map(i -> start + i).toArray();
 
-        return getArrayEntity(name, array);
+        return createArrayEntity(name, array);
     }
 
     public ArrayEntity createArrayWithPattern(String name, int size, int initialValue, int step) {
         ArrayValidator.validate(size <= 0, "Size should be more than 0");
         int[] array = IntStream.range(0, size).map(i -> initialValue + (i * step)).toArray();
 
-        return getArrayEntity(name, array);
+        return createArrayEntity(name, array);
     }
 
     public ArrayEntity createArrayFromRange(String name, int start, int end, int step) {
@@ -49,10 +49,10 @@ public class ArrayFactory {
             current += step;
         }
 
-        return getArrayEntity(name, array);
+        return createArrayEntity(name, array);
     }
 
-    private ArrayEntity getArrayEntity(String name, int[] array) {
+    private ArrayEntity createArrayEntity(String name, int[] array) {
         return new ArrayBuilder<>(ArrayEntity::new)
                 .setName(name)
                 .setArray(array)
