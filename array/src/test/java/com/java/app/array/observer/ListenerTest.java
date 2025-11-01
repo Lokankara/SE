@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.entity.ArrayStatistics;
+import com.java.app.array.entity.IntArrayStatistics;
 import com.java.app.array.entity.Warehouse;
 import com.java.app.array.factory.ArrayFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ class ListenerTest {
 
         warehouse.onChanged(array);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(5, stats.getCount());
         assertEquals(30, stats.getSum());
@@ -43,13 +43,13 @@ class ListenerTest {
         ArrayEntity array = factory.createArray(new int[] {1, 2, 3});
         warehouse.onChanged(array);
 
-        ArrayStatistics initialStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics initialStats = warehouse.getStatistics(array.getId());
         assertEquals(6, initialStats.getSum());
 
         array.setArray(2, 30);
         warehouse.onChanged(array);
 
-        ArrayStatistics updatedStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics updatedStats = warehouse.getStatistics(array.getId());
         assertEquals(33, updatedStats.getSum());
         assertEquals(3, updatedStats.getCount());
     }
@@ -60,7 +60,7 @@ class ListenerTest {
 
         warehouse.onChanged(emptyArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(emptyArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(emptyArray.getId());
         assertNotNull(stats);
         assertEquals(0, stats.getCount());
         assertEquals(0, stats.getSum());
@@ -75,7 +75,7 @@ class ListenerTest {
 
         warehouse.onChanged(singleArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(singleArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(singleArray.getId());
         assertNotNull(stats);
         assertEquals(1, stats.getCount());
         assertEquals(55, stats.getSum());
@@ -90,7 +90,7 @@ class ListenerTest {
 
         warehouse.onChanged(array);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(5, stats.getCount());
         assertEquals(0, stats.getSum());
@@ -105,7 +105,7 @@ class ListenerTest {
 
         warehouse.onChanged(array);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(5, stats.getCount());
         assertEquals(35, stats.getSum());
@@ -122,8 +122,8 @@ class ListenerTest {
         warehouse.onChanged(array1);
         warehouse.onChanged(array2);
 
-        ArrayStatistics stats1 = warehouse.getStatistics(array1.getId());
-        ArrayStatistics stats2 = warehouse.getStatistics(array2.getId());
+        IntArrayStatistics stats1 = warehouse.getStatistics(array1.getId());
+        IntArrayStatistics stats2 = warehouse.getStatistics(array2.getId());
 
         assertNotNull(stats1);
         assertNotNull(stats2);
@@ -138,7 +138,7 @@ class ListenerTest {
 
         warehouse.onChanged(array);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(3, stats.getCount());
         assertEquals(6000000, stats.getSum());
@@ -152,7 +152,7 @@ class ListenerTest {
         ArrayEntity array = factory.createArray(new int[] {1, 1, 1});
         warehouse.onChanged(array);
 
-        ArrayStatistics oldStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics oldStats = warehouse.getStatistics(array.getId());
         assertEquals(3, oldStats.getSum());
 
         array.setArray(0, 100);
@@ -160,14 +160,14 @@ class ListenerTest {
         array.setArray(2, 300);
         warehouse.onChanged(array);
 
-        ArrayStatistics newStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics newStats = warehouse.getStatistics(array.getId());
         assertEquals(600, newStats.getSum());
         assertNotEquals(oldStats.getSum(), newStats.getSum());
     }
 
     @Test
     void testGetStatisticsReturnsNull() {
-        ArrayStatistics nonExistentStats = warehouse.getStatistics(99999);
+        IntArrayStatistics nonExistentStats = warehouse.getStatistics(99999);
         assertNull(nonExistentStats);
     }
 
@@ -176,12 +176,12 @@ class ListenerTest {
         ArrayEntity array = factory.createArray(new int[] {1, 2, 3});
         warehouse.onChanged(array);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
 
         warehouse.removeStatistics(array.getId());
 
-        ArrayStatistics removedStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics removedStats = warehouse.getStatistics(array.getId());
         assertNull(removedStats);
     }
 
@@ -189,7 +189,7 @@ class ListenerTest {
     void testRemoveNonExistentStatistics() {
         warehouse.removeStatistics(12345);
 
-        ArrayStatistics stats = warehouse.getStatistics(12345);
+        IntArrayStatistics stats = warehouse.getStatistics(12345);
         assertNull(stats);
     }
 }

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.java.app.array.comparator.ArrayComparators;
 import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.entity.ArrayStatistics;
+import com.java.app.array.entity.IntArrayStatistics;
 import com.java.app.array.provider.ArrayServiceArgumentsProvider;
 import com.java.app.array.specification.IdSpecification;
 import com.java.app.array.specification.NameSpecification;
@@ -133,7 +133,7 @@ class ArrayServiceTest {
         List<ArrayEntity> found = arrayService.searchArrays(new NameSpecification(name));
         ArrayEntity entity = found.getFirst();
 
-        ArrayStatistics stats = arrayService.getArrayStatistics(entity.getId());
+        IntArrayStatistics stats = arrayService.getArrayStatistics(entity.getId());
 
         if (array.length > 0) {
             assertNotNull(stats);
@@ -173,13 +173,13 @@ class ArrayServiceTest {
         List<ArrayEntity> found = arrayService.searchArrays(new NameSpecification(name));
         ArrayEntity entity = found.getFirst();
 
-        ArrayStatistics originalStats = arrayService.getArrayStatistics(entity.getId());
+        IntArrayStatistics originalStats = arrayService.getArrayStatistics(entity.getId());
 
         if (array.length > 0) {
             int newValue = 1000;
             arrayService.updateArrayElement(entity.getId(), 0, newValue);
 
-            ArrayStatistics updatedStats = arrayService.getArrayStatistics(entity.getId());
+            IntArrayStatistics updatedStats = arrayService.getArrayStatistics(entity.getId());
 
             if (originalStats != null && updatedStats != null) {
                 assertNotEquals(originalStats.getSum(), updatedStats.getSum());
@@ -292,7 +292,7 @@ class ArrayServiceTest {
     @Test
     @DisplayName("Get statistics for non-existent array returns null")
     void getStatisticsForNonExistentArrayReturnsNull() {
-        ArrayStatistics stats = arrayService.getArrayStatistics(99999);
+        IntArrayStatistics stats = arrayService.getArrayStatistics(99999);
         assertNull(stats);
     }
 
@@ -316,10 +316,10 @@ class ArrayServiceTest {
         List<ArrayEntity> found = arrayService.searchArrays(new NameSpecification("ObserverTest"));
         ArrayEntity entity = found.getFirst();
 
-        ArrayStatistics stats1 = arrayService.getArrayStatistics(entity.getId());
+        IntArrayStatistics stats1 = arrayService.getArrayStatistics(entity.getId());
 
         arrayService.updateArrayElement(entity.getId(), 0, 50);
-        ArrayStatistics stats2 = arrayService.getArrayStatistics(entity.getId());
+        IntArrayStatistics stats2 = arrayService.getArrayStatistics(entity.getId());
 
         if (stats1 != null && stats2 != null) {
             assertNotEquals(stats1.getSum(), stats2.getSum());

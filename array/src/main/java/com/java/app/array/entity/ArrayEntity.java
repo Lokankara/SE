@@ -84,7 +84,7 @@ public final class ArrayEntity extends ArrayObservable {
 
     @Override
     public String toString() {
-        return String.format("ArrayEntity{id=%d, name='%s', array=%s}",
+        return String.format("IntArrayEntity{id=%d, name='%s', array=%s}",
                 id, name, Arrays.toString(array));
     }
 }

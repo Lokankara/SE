@@ -5,7 +5,7 @@ import com.java.app.array.comparator.ArrayComparators;
 import com.java.app.array.dao.ArrayRepository;
 import com.java.app.array.dao.InMemoryArrayRepository;
 import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.entity.ArrayStatistics;
+import com.java.app.array.entity.IntArrayStatistics;
 import com.java.app.array.entity.Warehouse;
 import com.java.app.array.specification.Specification;
 
@@ -45,7 +45,7 @@ public class ArrayService {
         return repository.sortBy(comparator);
     }
 
-    public ArrayStatistics getArrayStatistics(int id) {
+    public IntArrayStatistics getArrayStatistics(int id) {
         return warehouse.getStatistics(id);
     }
 

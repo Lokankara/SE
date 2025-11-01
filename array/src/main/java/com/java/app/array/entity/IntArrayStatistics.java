@@ -3,14 +3,14 @@ package com.java.app.array.entity;
 import com.java.app.array.service.ArrayCalculateService;
 import com.java.app.array.validator.ArrayValidator;
 
-public class ArrayStatistics {
+public class IntArrayStatistics {
     private final long sum;
     private final double average;
     private final int max;
     private final int min;
     private final int count;
 
-    public ArrayStatistics(ArrayEntity entity) {
+    public IntArrayStatistics(ArrayEntity entity) {
         ArrayCalculateService service = new ArrayCalculateService(new ArrayValidator());
         this.count = entity.getArray().length;
         if (count == 0) {
@@ -49,7 +49,7 @@ public class ArrayStatistics {
     @Override
     public String toString() {
         return String.format(
-                "ArrayStatistics'{'sum=%s, average==%s, max==%s, min==%s, count==%s'}'",
+                "Array Statistics'{'sum=%s, average==%s, max==%s, min==%s, count==%s'}'",
                 sum, average, max, min, count);
     }
 }

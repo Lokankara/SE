@@ -15,7 +15,6 @@ public final class ArrayBuilder<T> {
         this.creator = ArrayValidator.getOrThrow(creator);
     }
 
-
     public ArrayBuilder<T> setArray(int[] array) {
         this.values = ArrayValidator.getIfNull(array.clone(), new int[0]);
         return this;

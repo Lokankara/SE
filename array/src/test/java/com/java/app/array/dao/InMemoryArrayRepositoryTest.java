@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.java.app.array.comparator.ArrayComparators;
 import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.entity.ArrayStatistics;
+import com.java.app.array.entity.IntArrayStatistics;
 import com.java.app.array.entity.Warehouse;
 import com.java.app.array.factory.ArrayFactory;
 import com.java.app.array.specification.IdSpecification;
@@ -43,7 +43,7 @@ class InMemoryArrayRepositoryTest {
         assertEquals(1, allEntities.size());
         assertTrue(allEntities.contains(entity));
 
-        ArrayStatistics stats = warehouse.getStatistics(entity.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(entity.getId());
         assertNotNull(stats);
     }
 
@@ -69,7 +69,7 @@ class InMemoryArrayRepositoryTest {
         ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
         repository.add(entity);
 
-        ArrayStatistics initialStats = warehouse.getStatistics(entity.getId());
+        IntArrayStatistics initialStats = warehouse.getStatistics(entity.getId());
         assertNotNull(initialStats);
 
         repository.remove(entity);
@@ -78,7 +78,7 @@ class InMemoryArrayRepositoryTest {
         assertEquals(0, allEntities.size());
         assertFalse(allEntities.contains(entity));
 
-        ArrayStatistics removedStats = warehouse.getStatistics(entity.getId());
+        IntArrayStatistics removedStats = warehouse.getStatistics(entity.getId());
         assertNull(removedStats);
     }
 
@@ -110,7 +110,7 @@ class InMemoryArrayRepositoryTest {
         assertFalse(allEntities.contains(entity1));
         assertTrue(allEntities.contains(entity2));
 
-        ArrayStatistics stats = warehouse.getStatistics(entity1.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(entity1.getId());
         assertNull(stats);
     }
 
@@ -304,13 +304,13 @@ class InMemoryArrayRepositoryTest {
         ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
         repository.add(entity);
         System.out.println(entity);
-        ArrayStatistics initialStats = warehouse.getStatistics(entity.getId());
+        IntArrayStatistics initialStats = warehouse.getStatistics(entity.getId());
         System.out.println(initialStats);
         assertEquals(6, initialStats.getSum());
 
         entity.setArray(0, 10);
 
-        ArrayStatistics updatedStats = warehouse.getStatistics(entity.getId());
+        IntArrayStatistics updatedStats = warehouse.getStatistics(entity.getId());
         assertEquals(15, updatedStats.getSum());
     }
 

@@ -27,7 +27,7 @@ class WarehouseTest {
 
         array.setArray(0, 10);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(5, stats.getCount());
     }
@@ -43,8 +43,8 @@ class WarehouseTest {
         array1.setArray(0, 100);
         array2.setArray(0, 200);
 
-        ArrayStatistics stats1 = warehouse.getStatistics(array1.getId());
-        ArrayStatistics stats2 = warehouse.getStatistics(array2.getId());
+        IntArrayStatistics stats1 = warehouse.getStatistics(array1.getId());
+        IntArrayStatistics stats2 = warehouse.getStatistics(array2.getId());
 
         assertNotNull(stats1);
         assertNotNull(stats2);
@@ -57,12 +57,12 @@ class WarehouseTest {
         array.attach(warehouse);
         array.setArray(0, 10);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
 
         warehouse.removeStatistics(array.getId());
 
-        ArrayStatistics removedStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics removedStats = warehouse.getStatistics(array.getId());
         assertNull(removedStats);
     }
 
@@ -73,7 +73,7 @@ class WarehouseTest {
 
         array.setArray(1, 25);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(3, stats.getCount());
     }
@@ -85,7 +85,7 @@ class WarehouseTest {
 
         warehouse.onChanged(emptyArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(emptyArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(emptyArray.getId());
         assertNotNull(stats);
         assertEquals(0, stats.getCount());
         assertEquals(0, stats.getSum());
@@ -98,13 +98,13 @@ class WarehouseTest {
         array.attach(warehouse);
 
         array.setArray(0, 50);
-        ArrayStatistics stats1 = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats1 = warehouse.getStatistics(array.getId());
 
         array.setArray(1, 100);
-        ArrayStatistics stats2 = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats2 = warehouse.getStatistics(array.getId());
 
         array.setArray(2, 150);
-        ArrayStatistics stats3 = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats3 = warehouse.getStatistics(array.getId());
 
         assertNotNull(stats1);
         assertNotNull(stats2);
@@ -122,7 +122,7 @@ class WarehouseTest {
         array.setArray(1, 200);
         array.setArray(2, 300);
 
-        ArrayStatistics finalStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics finalStats = warehouse.getStatistics(array.getId());
         assertNotNull(finalStats);
         assertEquals(3, finalStats.getCount());
 

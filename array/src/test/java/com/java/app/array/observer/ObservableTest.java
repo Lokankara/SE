@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.entity.ArrayStatistics;
+import com.java.app.array.entity.IntArrayStatistics;
 import com.java.app.array.entity.Warehouse;
 import com.java.app.array.factory.ArrayFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ class ObservableTest {
 
         array.setArray(0, 100);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(5, stats.getCount());
         assertNotEquals(15, stats.getSum());
@@ -47,7 +47,7 @@ class ObservableTest {
         array.attach(warehouse);
         warehouse.onChanged(array);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(3, stats.getCount());
     }
@@ -63,8 +63,8 @@ class ObservableTest {
         warehouse.onChanged(array1);
         warehouse.onChanged(array2);
 
-        ArrayStatistics stats1 = warehouse.getStatistics(array1.getId());
-        ArrayStatistics stats2 = warehouse.getStatistics(array2.getId());
+        IntArrayStatistics stats1 = warehouse.getStatistics(array1.getId());
+        IntArrayStatistics stats2 = warehouse.getStatistics(array2.getId());
 
         assertNotNull(stats1);
         assertNotNull(stats2);
@@ -78,12 +78,12 @@ class ObservableTest {
         array.attach(warehouse);
         warehouse.onChanged(array);
 
-        ArrayStatistics initialStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics initialStats = warehouse.getStatistics(array.getId());
         long initialSum = initialStats.getSum();
 
         array.setArray(1, 50);
 
-        ArrayStatistics updatedStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics updatedStats = warehouse.getStatistics(array.getId());
         assertNotEquals(initialSum, updatedStats.getSum());
         assertEquals(3, updatedStats.getCount());
     }
@@ -94,13 +94,13 @@ class ObservableTest {
         array.attach(warehouse);
         warehouse.onChanged(array);
 
-        ArrayStatistics initialStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics initialStats = warehouse.getStatistics(array.getId());
         assertNotNull(initialStats);
 
         array.removeListener(warehouse);
         array.setArray(0, 999);
 
-        ArrayStatistics statsAfterRemoval = warehouse.getStatistics(array.getId());
+        IntArrayStatistics statsAfterRemoval = warehouse.getStatistics(array.getId());
         assertEquals(initialStats.getSum(), statsAfterRemoval.getSum());
     }
 
@@ -110,13 +110,13 @@ class ObservableTest {
         randomArray.attach(warehouse);
         warehouse.onChanged(randomArray);
 
-        ArrayStatistics initialStats = warehouse.getStatistics(randomArray.getId());
+        IntArrayStatistics initialStats = warehouse.getStatistics(randomArray.getId());
         assertNotNull(initialStats);
         assertEquals(4, initialStats.getCount());
 
         randomArray.setArray(0, 100);
 
-        ArrayStatistics updatedStats = warehouse.getStatistics(randomArray.getId());
+        IntArrayStatistics updatedStats = warehouse.getStatistics(randomArray.getId());
         assertNotEquals(initialStats.getSum(), updatedStats.getSum());
     }
 
@@ -126,7 +126,7 @@ class ObservableTest {
         sequentialArray.attach(warehouse);
         warehouse.onChanged(sequentialArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(sequentialArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(sequentialArray.getId());
         assertNotNull(stats);
         assertEquals(5, stats.getCount());
 
@@ -140,7 +140,7 @@ class ObservableTest {
         patternArray.attach(warehouse);
         warehouse.onChanged(patternArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(patternArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(patternArray.getId());
         assertNotNull(stats);
         assertEquals(3, stats.getCount());
 
@@ -154,7 +154,7 @@ class ObservableTest {
         rangeArray.attach(warehouse);
         warehouse.onChanged(rangeArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(rangeArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(rangeArray.getId());
         assertNotNull(stats);
         assertEquals(3, stats.getCount());
 
@@ -168,7 +168,7 @@ class ObservableTest {
         emptyArray.attach(warehouse);
         warehouse.onChanged(emptyArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(emptyArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(emptyArray.getId());
         assertNotNull(stats);
         assertEquals(0, stats.getCount());
         assertEquals(0, stats.getSum());
@@ -181,13 +181,13 @@ class ObservableTest {
         singleArray.attach(warehouse);
         warehouse.onChanged(singleArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(singleArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(singleArray.getId());
         assertNotNull(stats);
         assertEquals(1, stats.getCount());
 
         singleArray.setArray(0, 84);
 
-        ArrayStatistics updatedStats = warehouse.getStatistics(singleArray.getId());
+        IntArrayStatistics updatedStats = warehouse.getStatistics(singleArray.getId());
         assertNotEquals(42, updatedStats.getSum());
         assertEquals(84, singleArray.getArray()[0]);
     }
@@ -198,17 +198,17 @@ class ObservableTest {
         array.attach(warehouse);
         warehouse.onChanged(array);
 
-        ArrayStatistics initialStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics initialStats = warehouse.getStatistics(array.getId());
         assertEquals(4, initialStats.getSum());
 
         array.setArray(0, 10);
-        ArrayStatistics stats1 = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats1 = warehouse.getStatistics(array.getId());
 
         array.setArray(1, 20);
-        ArrayStatistics stats2 = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats2 = warehouse.getStatistics(array.getId());
 
         array.setArray(2, 30);
-        ArrayStatistics stats3 = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats3 = warehouse.getStatistics(array.getId());
 
         assertTrue(stats1.getSum() > initialStats.getSum());
         assertTrue(stats2.getSum() > stats1.getSum());
@@ -225,7 +225,7 @@ class ObservableTest {
         array.setArray(1, 200);
         array.setArray(2, 300);
 
-        ArrayStatistics finalStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics finalStats = warehouse.getStatistics(array.getId());
         assertEquals(3, finalStats.getCount());
 
         int[] currentArray = array.getArray();
@@ -240,7 +240,7 @@ class ObservableTest {
         largeArray.attach(warehouse);
         warehouse.onChanged(largeArray);
 
-        ArrayStatistics stats = warehouse.getStatistics(largeArray.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(largeArray.getId());
         assertNotNull(stats);
         assertEquals(100, stats.getCount());
         assertTrue(stats.getSum() > 0);
@@ -253,12 +253,12 @@ class ObservableTest {
         array.attach(warehouse);
         warehouse.onChanged(array);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
 
         warehouse.removeStatistics(array.getId());
 
-        ArrayStatistics removedStats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics removedStats = warehouse.getStatistics(array.getId());
         assertNull(removedStats);
     }
 
@@ -268,7 +268,7 @@ class ObservableTest {
         array.attach(warehouse);
         warehouse.onChanged(array);
 
-        ArrayStatistics stats = warehouse.getStatistics(array.getId());
+        IntArrayStatistics stats = warehouse.getStatistics(array.getId());
         assertNotNull(stats);
         assertEquals(3, stats.getCount());
         assertEquals(Integer.MIN_VALUE, stats.getMin());
@@ -287,8 +287,8 @@ class ObservableTest {
 
         array1.setArray(0, 999);
 
-        ArrayStatistics stats1 = warehouse.getStatistics(array1.getId());
-        ArrayStatistics stats2 = warehouse.getStatistics(array2.getId());
+        IntArrayStatistics stats1 = warehouse.getStatistics(array1.getId());
+        IntArrayStatistics stats2 = warehouse.getStatistics(array2.getId());
 
         assertTrue(stats1.getSum() > stats2.getSum());
         assertEquals(999, array1.getArray()[0]);

@@ -8,7 +8,7 @@ import java.util.Map;
 public class Warehouse implements Listener<ArrayEntity> {
 
     private static final Warehouse INSTANCE = new Warehouse();
-    private final Map<Integer, ArrayStatistics> statisticsMap;
+    private final Map<Integer, IntArrayStatistics> statisticsMap;
 
     private Warehouse() {
         this.statisticsMap = new HashMap<>();
@@ -18,7 +18,7 @@ public class Warehouse implements Listener<ArrayEntity> {
         return INSTANCE;
     }
 
-    public ArrayStatistics getStatistics(int id) {
+    public IntArrayStatistics getStatistics(int id) {
         return statisticsMap.get(id);
     }
 
@@ -28,7 +28,7 @@ public class Warehouse implements Listener<ArrayEntity> {
 
     @Override
     public void onChanged(ArrayEntity arrayEntity) {
-        ArrayStatistics statistics = new ArrayStatistics(arrayEntity);
+        IntArrayStatistics statistics = new IntArrayStatistics(arrayEntity);
         statisticsMap.put(arrayEntity.getId(), statistics);
     }
 }
