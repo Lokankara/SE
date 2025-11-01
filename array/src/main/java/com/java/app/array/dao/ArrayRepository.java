@@ -1,9 +1,11 @@
 package com.java.app.array.dao;
 
-import com.java.app.array.comparator.ArrayComparators;
+import com.java.app.array.comparator.ArrayComparator;
+import com.java.app.array.entity.ArrayEntity;
 import com.java.app.array.specification.Specification;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface ArrayRepository<T> {
 
@@ -17,7 +19,11 @@ public interface ArrayRepository<T> {
 
     List<T> findAll();
 
-    List<T> sortBy(ArrayComparators comparator);
+    List<T> sortBy(ArrayComparator comparator);
 
     void clear();
+
+    List<ArrayEntity> queryStream(Specification<ArrayEntity> specification);
+
+    List<ArrayEntity> queryPredicate(Predicate<ArrayEntity> predicate);
 }

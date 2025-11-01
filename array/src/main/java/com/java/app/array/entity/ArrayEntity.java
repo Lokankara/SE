@@ -5,11 +5,12 @@ import com.java.app.array.validator.ArrayValidator;
 
 import java.util.Arrays;
 
-public final class ArrayEntity extends ArrayObservable {
+public final class ArrayEntity {
 
     private final int id;
     private final String name;
     private final int[] array;
+    private final ArrayObservable observable = new ArrayObservable();
 
     public ArrayEntity() {
         this.id = 0;
@@ -18,7 +19,7 @@ public final class ArrayEntity extends ArrayObservable {
     }
 
     private int[] updateState(int[] ints) {
-        notifyListeners(this);
+        observable.notifyListeners(this);
         return ArrayValidator.getIfNull(ints.clone(), new int[0]);
     }
 
@@ -61,7 +62,7 @@ public final class ArrayEntity extends ArrayObservable {
     public void setArray(int index, int value) {
         ArrayValidator.validate(index < 0 || index >= array.length, "Size out of range");
         array[index] = value;
-        notifyListeners(this);
+        observable.notifyListeners(this);
     }
 
     @Override
@@ -86,5 +87,13 @@ public final class ArrayEntity extends ArrayObservable {
     public String toString() {
         return String.format("IntArrayEntity{id=%d, name='%s', array=%s}",
                 id, name, Arrays.toString(array));
+    }
+
+    public void attach(Warehouse warehouse) {
+        observable.attach(warehouse);
+    }
+
+    public void removeListener(Warehouse warehouse) {
+            observable.removeListener(warehouse);
     }
 }

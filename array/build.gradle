@@ -1,6 +1,13 @@
+import com.github.spotbugs.snom.SpotBugsTask
+
 plugins {
     id 'java'
     id 'jacoco'
+    id 'com.github.spotbugs' version '6.2.5'
+}
+
+repositories {
+    mavenCentral()
 }
 
 java {
@@ -54,6 +61,21 @@ jacocoTestCoverageVerification {
                 minimum = 0.60
             }
         }
+    }
+}
+
+spotbugs {
+    toolVersion = '4.9.7'
+    ignoreFailures = false
+}
+
+tasks.withType(SpotBugsTask).configureEach {
+    reports {
+        xml.required = false
+        html.required = true
+        // configure SARIF via property setters to avoid incorrect casting
+        sarif.required.set(true)
+        sarif.outputLocation.set(file("${buildDir}/reports/spotbugs/${project.name}.sarif"))
     }
 }
 

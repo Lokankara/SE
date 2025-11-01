@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.java.app.array.comparator.ArrayComparators;
+import com.java.app.array.comparator.ArrayComparator;
 import com.java.app.array.entity.ArrayEntity;
 import com.java.app.array.entity.IntArrayStatistics;
 import com.java.app.array.provider.ArrayServiceArgumentsProvider;
@@ -78,11 +78,11 @@ class ArrayServiceTest {
         arrayService.createArray("Alpha", new int[] {1});
         arrayService.createArray("Beta", new int[] {2});
 
-        List<ArrayEntity> allSorted = arrayService.sort(ArrayComparators.NAME);
+        List<ArrayEntity> allSorted = arrayService.sort(ArrayComparator.NAME);
         assertEquals(3, allSorted.size());
         assertEquals("Alpha", allSorted.getFirst().getName());
 
-        List<ArrayEntity> allSortedByFirst = arrayService.sort(ArrayComparators.FIRST);
+        List<ArrayEntity> allSortedByFirst = arrayService.sort(ArrayComparator.FIRST);
         assertEquals(1, allSortedByFirst.getFirst().getFirst());
     }
 
@@ -241,10 +241,10 @@ class ArrayServiceTest {
         arrayService.createArray("Alice", new int[] {2, 20});
         arrayService.createArray("Bob", new int[] {8, 15});
 
-        List<ArrayEntity> sortedByName = arrayService.sort(ArrayComparators.NAME);
+        List<ArrayEntity> sortedByName = arrayService.sort(ArrayComparator.NAME);
         assertEquals("Alice", sortedByName.getFirst().getName());
 
-        List<ArrayEntity> sortedByFirst = arrayService.sort(ArrayComparators.FIRST);
+        List<ArrayEntity> sortedByFirst = arrayService.sort(ArrayComparator.FIRST);
         assertEquals(2, sortedByFirst.getFirst().getFirst());
     }
 
@@ -299,8 +299,8 @@ class ArrayServiceTest {
     @Test
     @DisplayName("Empty service operations return empty results")
     void emptyServiceOperationsReturnEmptyResults() {
-        List<ArrayEntity> sortedById = arrayService.sort(ArrayComparators.ID);
-        List<ArrayEntity> sortedByName = arrayService.sort(ArrayComparators.NAME);
+        List<ArrayEntity> sortedById = arrayService.sort(ArrayComparator.ID);
+        List<ArrayEntity> sortedByName = arrayService.sort(ArrayComparator.NAME);
         List<ArrayEntity> searchResults = arrayService.searchArrays(new NameSpecification("NonExistent"));
 
         assertTrue(sortedById.isEmpty());

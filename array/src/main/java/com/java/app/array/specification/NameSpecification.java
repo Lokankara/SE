@@ -12,7 +12,7 @@ public class NameSpecification implements Specification<ArrayEntity> {
     }
 
     @Override
-    public boolean isSatisfiedBy(ArrayEntity entity) {
+    public boolean specify(ArrayEntity entity) {
         return entity.getName().equals(targetName);
     }
 }

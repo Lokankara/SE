@@ -12,7 +12,7 @@ public class SumLessThanSpecification implements Specification<ArrayEntity> {
     }
 
     @Override
-    public boolean isSatisfiedBy(ArrayEntity entity) {
+    public boolean specify(ArrayEntity entity) {
         IntArrayStatistics statistics = Warehouse.getInstance().getStatistics(entity.getId());
         return statistics != null && statistics.getSum() < threshold;
     }

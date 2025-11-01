@@ -1,12 +1,13 @@
 package com.java.app.array.dao;
 
-import com.java.app.array.comparator.ArrayComparators;
+import com.java.app.array.comparator.ArrayComparator;
 import com.java.app.array.entity.ArrayEntity;
 import com.java.app.array.entity.Warehouse;
 import com.java.app.array.specification.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
 
@@ -40,9 +41,11 @@ public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
     }
 
     @Override
-    public List<ArrayEntity> findBySpecification(Specification<ArrayEntity> specification) {
+    public List<ArrayEntity> findBySpecification(
+            Specification<ArrayEntity> specification) {
+
         return entities.stream()
-                .filter(specification::isSatisfiedBy)
+                .filter(specification::specify)
                 .toList();
     }
 
@@ -52,9 +55,23 @@ public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
     }
 
     @Override
-    public List<ArrayEntity> sortBy(ArrayComparators comparator) {
+    public List<ArrayEntity> sortBy(ArrayComparator comparator) {
         return entities.stream()
                 .sorted(comparator.getComparator())
+                .toList();
+    }
+
+    @Override
+    public List<ArrayEntity> queryStream(Specification<ArrayEntity> specification) {
+        return entities.stream()
+                .filter(specification::specify)
+                .toList();
+    }
+
+    @Override
+    public List<ArrayEntity> queryPredicate(Predicate<ArrayEntity> predicate) {
+        return entities.stream()
+                .filter(predicate)
                 .toList();
     }
 

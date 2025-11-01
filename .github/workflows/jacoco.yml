@@ -1,0 +1,66 @@
+name: JaCoCo Coverage Report
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  jacoco-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Cache Gradle deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-cache-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-cache-${{ runner.os }}-
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Run tests and generate JaCoCo report
+        run: ./gradlew clean test jacocoTestReport jacocoTestCoverageVerification --no-daemon
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx1024m"
+
+      - name: Show report paths
+        run: |
+          echo "HTML report dir:"
+          ls -la build/reports/jacoco || true
+          echo "XML report:"
+          ls -la build/reports/jacoco/test || true
+          echo "JaCoCo exec:"
+          ls -la build/jacoco || true
+
+      - name: Upload JaCoCo HTML report (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-html-report
+          path: build/reports/jacoco/test/html
+
+      - name: Upload JaCoCo XML + exec (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-xml-and-exec
+          path: |
+            build/reports/jacoco/test/jacocoTestReport.xml
+            build/jacoco/test.exec

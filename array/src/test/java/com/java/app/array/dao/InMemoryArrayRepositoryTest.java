@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.java.app.array.comparator.ArrayComparators;
+import com.java.app.array.comparator.ArrayComparator;
 import com.java.app.array.entity.ArrayEntity;
 import com.java.app.array.entity.IntArrayStatistics;
 import com.java.app.array.entity.Warehouse;
@@ -214,7 +214,7 @@ class InMemoryArrayRepositoryTest {
         repository.add(entity1);
         repository.add(entity2);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.ID);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.ID);
 
         assertEquals(3, sorted.size());
         assertTrue(sorted.getFirst().getId() < sorted.get(1).getId());
@@ -231,7 +231,7 @@ class InMemoryArrayRepositoryTest {
         repository.add(entityA);
         repository.add(entityB);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.NAME);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.NAME);
 
         assertEquals(3, sorted.size());
         assertEquals("Alice", sorted.getFirst().getName());
@@ -249,7 +249,7 @@ class InMemoryArrayRepositoryTest {
         repository.add(entity2);
         repository.add(entity3);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.FIRST);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.FIRST);
 
         assertEquals(3, sorted.size());
         assertEquals(2, sorted.getFirst().getFirst());
@@ -267,7 +267,7 @@ class InMemoryArrayRepositoryTest {
         repository.add(shortArray);
         repository.add(mediumArray);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.LENGTH);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.LENGTH);
 
         assertEquals(3, sorted.size());
         assertEquals(1, sorted.getFirst().getLength());
@@ -277,7 +277,7 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testSortEmptyRepository() {
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.ID);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.ID);
 
         assertEquals(0, sorted.size());
         assertTrue(sorted.isEmpty());

@@ -10,7 +10,7 @@ public class IdSpecification implements Specification<ArrayEntity> {
     }
 
     @Override
-    public boolean isSatisfiedBy(ArrayEntity entity) {
+    public boolean specify(ArrayEntity entity) {
         return entity.getId() == targetId;
     }
 }

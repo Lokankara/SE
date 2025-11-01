@@ -1,7 +1,7 @@
 package com.java.app.array.service;
 
 import com.java.app.array.builder.ArrayBuilder;
-import com.java.app.array.comparator.ArrayComparators;
+import com.java.app.array.comparator.ArrayComparator;
 import com.java.app.array.dao.ArrayRepository;
 import com.java.app.array.dao.InMemoryArrayRepository;
 import com.java.app.array.entity.ArrayEntity;
@@ -20,7 +20,7 @@ public class ArrayService {
         this.warehouse = Warehouse.getInstance();
     }
 
-    public List<ArrayEntity> sort(ArrayComparators comparator) {
+    public List<ArrayEntity> sort(ArrayComparator comparator) {
         return repository.sortBy(comparator);
     }
 
@@ -41,7 +41,7 @@ public class ArrayService {
         return repository.findBySpecification(specification);
     }
 
-    public List<ArrayEntity> sortArrays(ArrayComparators comparator) {
+    public List<ArrayEntity> sortArrays(ArrayComparator comparator) {
         return repository.sortBy(comparator);
     }
 

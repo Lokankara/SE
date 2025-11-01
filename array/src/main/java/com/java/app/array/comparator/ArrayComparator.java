@@ -4,7 +4,7 @@ import com.java.app.array.entity.ArrayEntity;
 
 import java.util.Comparator;
 
-public enum ArrayComparators {
+public enum ArrayComparator {
     ID(Comparator.comparingInt(ArrayEntity::getId)),
     NAME(Comparator.comparing(ArrayEntity::getName)),
     FIRST(Comparator.comparingInt(ArrayEntity::getFirst)),
@@ -12,7 +12,7 @@ public enum ArrayComparators {
 
     private final Comparator<ArrayEntity> comparator;
 
-    ArrayComparators(Comparator<ArrayEntity> comparator) {
+    ArrayComparator(Comparator<ArrayEntity> comparator) {
         this.comparator = comparator;
     }
 
