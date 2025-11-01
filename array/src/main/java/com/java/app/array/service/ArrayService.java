@@ -1,5 +1,6 @@
 package com.java.app.array.service;
 
+import com.java.app.array.builder.ArrayBuilder;
 import com.java.app.array.comparator.ArrayComparators;
 import com.java.app.array.dao.ArrayRepository;
 import com.java.app.array.dao.InMemoryArrayRepository;
@@ -8,7 +9,6 @@ import com.java.app.array.entity.ArrayStatistics;
 import com.java.app.array.entity.Warehouse;
 import com.java.app.array.specification.Specification;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class ArrayService {
@@ -20,24 +20,16 @@ public class ArrayService {
         this.warehouse = Warehouse.getInstance();
     }
 
-    public List<ArrayEntity> sortById() {
-        return repository.sortBy(ArrayComparators.BY_ID);
+    public List<ArrayEntity> sort(ArrayComparators comparator) {
+        return repository.sortBy(comparator);
     }
 
-    public List<ArrayEntity> sortByName() {
-        return repository.sortBy(ArrayComparators.BY_NAME);
-    }
+    public void createArray(String name, int[] array) {
+        ArrayEntity entity = new ArrayBuilder<>(ArrayEntity::new)
+                .setName(name)
+                .setArray(array)
+                .build();
 
-    public List<ArrayEntity> sortByFirstElement() {
-        return repository.sortBy(ArrayComparators.BY_FIRST_ELEMENT);
-    }
-
-    public List<ArrayEntity> sortByLength() {
-        return repository.sortBy(ArrayComparators.BY_LENGTH);
-    }
-
-    public void createArray(int id, String name, int[] array) {
-        ArrayEntity entity = new ArrayEntity(id, name, array);
         repository.add(entity);
     }
 
@@ -49,7 +41,7 @@ public class ArrayService {
         return repository.findBySpecification(specification);
     }
 
-    public List<ArrayEntity> sortArrays(Comparator<ArrayEntity> comparator) {
+    public List<ArrayEntity> sortArrays(ArrayComparators comparator) {
         return repository.sortBy(comparator);
     }
 
@@ -58,12 +50,9 @@ public class ArrayService {
     }
 
     public void updateArrayElement(int arrayId, int elementIndex, int newValue) {
-        List<ArrayEntity> entities = repository.findAll();
-        for (ArrayEntity entity : entities) {
-            if (entity.getId() == arrayId) {
-                entity.setArray(elementIndex, newValue);
-                break;
-            }
-        }
+        repository.findAll().stream()
+                .filter(entity -> entity.getId() == arrayId)
+                .findFirst()
+                .ifPresent(entity -> entity.setArray(elementIndex, newValue));
     }
 }

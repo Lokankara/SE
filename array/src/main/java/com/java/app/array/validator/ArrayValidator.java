@@ -14,7 +14,7 @@ public class ArrayValidator {
 
     public static <T> T getOrThrow(T value) {
         if (value == null) {
-            throw new IllegalStateException("Cannot be null");
+            throw new IllegalStateException("Value should be not null");
         }
         return value;
     }

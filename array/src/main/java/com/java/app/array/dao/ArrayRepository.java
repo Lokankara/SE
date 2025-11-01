@@ -1,8 +1,8 @@
 package com.java.app.array.dao;
 
+import com.java.app.array.comparator.ArrayComparators;
 import com.java.app.array.specification.Specification;
 
-import java.util.Comparator;
 import java.util.List;
 
 public interface ArrayRepository<T> {
@@ -17,7 +17,7 @@ public interface ArrayRepository<T> {
 
     List<T> findAll();
 
-    List<T> sortBy(Comparator<T> comparator);
+    List<T> sortBy(ArrayComparators comparator);
 
     void clear();
 }

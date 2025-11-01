@@ -4,19 +4,19 @@ import com.java.app.array.entity.ArrayEntity;
 
 import java.util.Comparator;
 
-public class ArrayComparators {
+public enum ArrayComparators {
+    ID(Comparator.comparingInt(ArrayEntity::getId)),
+    NAME(Comparator.comparing(ArrayEntity::getName)),
+    FIRST(Comparator.comparingInt(ArrayEntity::getFirst)),
+    LENGTH(Comparator.comparingInt(ArrayEntity::getLength));
 
-    public static final Comparator<ArrayEntity> BY_ID =
-            Comparator.comparingInt(ArrayEntity::getId);
+    private final Comparator<ArrayEntity> comparator;
 
-    public static final Comparator<ArrayEntity> BY_NAME =
-            Comparator.comparing(ArrayEntity::getName);
+    ArrayComparators(Comparator<ArrayEntity> comparator) {
+        this.comparator = comparator;
+    }
 
-    public static final Comparator<ArrayEntity> BY_FIRST_ELEMENT =
-            Comparator.comparingInt(ArrayEntity::getFirst);
-
-    public static final Comparator<ArrayEntity> BY_LENGTH =
-            Comparator.comparingInt(ArrayEntity::getLength);
-
-    private ArrayComparators() {}
+    public Comparator<ArrayEntity> getComparator() {
+        return comparator;
+    }
 }

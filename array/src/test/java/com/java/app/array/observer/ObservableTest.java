@@ -28,7 +28,7 @@ class ObservableTest {
     @Test
     void testArrayEntityNotifiesWarehouseOnElementChange() {
         ArrayEntity array = factory.createArray(new int[] {1, 2, 3, 4, 5});
-        array.addListener(warehouse);
+        array.attach(warehouse);
 
         array.setArray(0, 100);
 
@@ -44,7 +44,7 @@ class ObservableTest {
 
         assertNull(warehouse.getStatistics(array.getId()));
 
-        array.addListener(warehouse);
+        array.attach(warehouse);
         warehouse.onChanged(array);
 
         ArrayStatistics stats = warehouse.getStatistics(array.getId());
@@ -57,8 +57,8 @@ class ObservableTest {
         ArrayEntity array1 = factory.createArray(new int[] {1, 2, 3});
         ArrayEntity array2 = factory.createArray(new int[] {4, 5, 6});
 
-        array1.addListener(warehouse);
-        array2.addListener(warehouse);
+        array1.attach(warehouse);
+        array2.attach(warehouse);
 
         warehouse.onChanged(array1);
         warehouse.onChanged(array2);
@@ -75,11 +75,11 @@ class ObservableTest {
     @Test
     void testWarehouseUpdatesAfterArrayModification() {
         ArrayEntity array = factory.createArray(new int[] {5, 10, 15});
-        array.addListener(warehouse);
+        array.attach(warehouse);
         warehouse.onChanged(array);
 
         ArrayStatistics initialStats = warehouse.getStatistics(array.getId());
-        int initialSum = initialStats.getSum();
+        long initialSum = initialStats.getSum();
 
         array.setArray(1, 50);
 
@@ -91,7 +91,7 @@ class ObservableTest {
     @Test
     void testRemoveListenerStopsWarehouseUpdates() {
         ArrayEntity array = factory.createArray(new int[] {1, 2, 3});
-        array.addListener(warehouse);
+        array.attach(warehouse);
         warehouse.onChanged(array);
 
         ArrayStatistics initialStats = warehouse.getStatistics(array.getId());
@@ -107,7 +107,7 @@ class ObservableTest {
     @Test
     void testRandomArrayNotifiesWarehouse() {
         ArrayEntity randomArray = factory.createRandomArray("RandomTest", 4, 1, 10);
-        randomArray.addListener(warehouse);
+        randomArray.attach(warehouse);
         warehouse.onChanged(randomArray);
 
         ArrayStatistics initialStats = warehouse.getStatistics(randomArray.getId());
@@ -123,7 +123,7 @@ class ObservableTest {
     @Test
     void testSequentialArrayNotifiesWarehouse() {
         ArrayEntity sequentialArray = factory.createSequentialArray("SeqTest", 1, 5);
-        sequentialArray.addListener(warehouse);
+        sequentialArray.attach(warehouse);
         warehouse.onChanged(sequentialArray);
 
         ArrayStatistics stats = warehouse.getStatistics(sequentialArray.getId());
@@ -137,7 +137,7 @@ class ObservableTest {
     @Test
     void testPatternArrayNotifiesWarehouse() {
         ArrayEntity patternArray = factory.createArrayWithPattern("PatternTest", 3, 2, 3);
-        patternArray.addListener(warehouse);
+        patternArray.attach(warehouse);
         warehouse.onChanged(patternArray);
 
         ArrayStatistics stats = warehouse.getStatistics(patternArray.getId());
@@ -151,7 +151,7 @@ class ObservableTest {
     @Test
     void testRangeArrayNotifiesWarehouse() {
         ArrayEntity rangeArray = factory.createArrayFromRange("RangeTest", 0, 10, 5);
-        rangeArray.addListener(warehouse);
+        rangeArray.attach(warehouse);
         warehouse.onChanged(rangeArray);
 
         ArrayStatistics stats = warehouse.getStatistics(rangeArray.getId());
@@ -165,7 +165,7 @@ class ObservableTest {
     @Test
     void testEmptyArrayNotifiesWarehouse() {
         ArrayEntity emptyArray = factory.createArray(new int[] {});
-        emptyArray.addListener(warehouse);
+        emptyArray.attach(warehouse);
         warehouse.onChanged(emptyArray);
 
         ArrayStatistics stats = warehouse.getStatistics(emptyArray.getId());
@@ -178,7 +178,7 @@ class ObservableTest {
     @Test
     void testSingleElementArrayNotifiesWarehouse() {
         ArrayEntity singleArray = factory.createArray(new int[] {42});
-        singleArray.addListener(warehouse);
+        singleArray.attach(warehouse);
         warehouse.onChanged(singleArray);
 
         ArrayStatistics stats = warehouse.getStatistics(singleArray.getId());
@@ -195,11 +195,11 @@ class ObservableTest {
     @Test
     void testMultipleChangesUpdateWarehouse() {
         ArrayEntity array = factory.createArray(new int[] {1, 1, 1, 1});
-        array.addListener(warehouse);
+        array.attach(warehouse);
         warehouse.onChanged(array);
 
         ArrayStatistics initialStats = warehouse.getStatistics(array.getId());
-//        assertEquals(4, initialStats.getSum());
+        assertEquals(4, initialStats.getSum());
 
         array.setArray(0, 10);
         ArrayStatistics stats1 = warehouse.getStatistics(array.getId());
@@ -218,7 +218,7 @@ class ObservableTest {
     @Test
     void testWarehouseStatisticsReflectCurrentState() {
         ArrayEntity array = factory.createArray(new int[] {10, 20, 30});
-        array.addListener(warehouse);
+        array.attach(warehouse);
         warehouse.onChanged(array);
 
         array.setArray(0, 100);
@@ -237,7 +237,7 @@ class ObservableTest {
     @Test
     void testWarehouseHandlesLargeArrays() {
         ArrayEntity largeArray = factory.createRandomArray("LargeArray", 100, 1, 1000);
-        largeArray.addListener(warehouse);
+        largeArray.attach(warehouse);
         warehouse.onChanged(largeArray);
 
         ArrayStatistics stats = warehouse.getStatistics(largeArray.getId());
@@ -250,7 +250,7 @@ class ObservableTest {
     @Test
     void testWarehouseRemoveStatistics() {
         ArrayEntity array = factory.createArray(new int[] {1, 2, 3});
-        array.addListener(warehouse);
+        array.attach(warehouse);
         warehouse.onChanged(array);
 
         ArrayStatistics stats = warehouse.getStatistics(array.getId());
@@ -265,7 +265,7 @@ class ObservableTest {
     @Test
     void testObserverPatternWithBoundaryValues() {
         ArrayEntity array = factory.createArray(new int[] {Integer.MIN_VALUE, 0, Integer.MAX_VALUE});
-        array.addListener(warehouse);
+        array.attach(warehouse);
         warehouse.onChanged(array);
 
         ArrayStatistics stats = warehouse.getStatistics(array.getId());
@@ -280,8 +280,8 @@ class ObservableTest {
         ArrayEntity array1 = factory.createArray(new int[] {1, 2, 3});
         ArrayEntity array2 = factory.createArray(new int[] {4, 5, 6});
 
-        array1.addListener(warehouse);
-        array2.addListener(warehouse);
+        array1.attach(warehouse);
+        array2.attach(warehouse);
         warehouse.onChanged(array1);
         warehouse.onChanged(array2);
 

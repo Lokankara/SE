@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Warehouse implements Listener<ArrayEntity> {
-    private static Warehouse instance;
+
+    private static final Warehouse INSTANCE = new Warehouse();
     private final Map<Integer, ArrayStatistics> statisticsMap;
 
     private Warehouse() {
@@ -14,10 +15,7 @@ public class Warehouse implements Listener<ArrayEntity> {
     }
 
     public static Warehouse getInstance() {
-        if (instance == null) {
-            instance = new Warehouse();
-        }
-        return instance;
+        return INSTANCE;
     }
 
     public ArrayStatistics getStatistics(int id) {

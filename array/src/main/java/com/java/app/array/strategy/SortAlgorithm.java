@@ -7,7 +7,7 @@ public abstract class SortAlgorithm {
 
     private final ArrayFactory factory;
 
-    public SortAlgorithm() {
+    protected SortAlgorithm() {
         this.factory = new ArrayFactory();
     }
 

@@ -3,14 +3,24 @@ package com.java.app.array.service;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.java.app.array.entity.ArrayEntity;
 import com.java.app.array.factory.ArrayFactory;
+import com.java.app.array.provider.ArrayArgumentsProvider;
+import com.java.app.array.provider.SortStrategyArgumentsProvider;
 import com.java.app.array.strategy.SortStrategy;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
 
 class ArraySortServiceTest {
 
@@ -23,164 +33,277 @@ class ArraySortServiceTest {
         factory = new ArrayFactory();
     }
 
-    @Test
-    void testSortReturnsNewArrayEntity() {
-        ArrayEntity original = factory.createArray(new int[] {3, 1, 4, 1, 5});
-
-        ArrayEntity sorted = sortService.sort(original, SortStrategy.Merge);
-
-        assertNotSame(original, sorted);
-        assertNotEquals(original.getId(), sorted.getId());
-    }
-
-    @Test
-    void testSortPreservesOriginalArrayState() {
-        int[] originalData = {9, 2, 7, 4, 1, 8};
-        ArrayEntity original = factory.createArray(originalData.clone());
-
-        sortService.sort(original, SortStrategy.Bubble);
-
-        assertArrayEquals(originalData, original.getArray());
-    }
-
-    @Test
-    void testSortWithRandomArrays() {
-        ArrayEntity randomArray = factory.createRandomArray("RandomSort", 20, 1, 100);
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should preserve original state")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort preserves original array state")
+    void sortPreservesOriginalArrayState(int[] originalData, int[] expectedSorted) {
+        ArrayEntity original = factory.createArray(originalData == null ? null : originalData.clone());
+        List<ArrayEntity> originalList = List.of(original);
 
         for (SortStrategy strategy : SortStrategy.values()) {
-            ArrayEntity sorted = sortService.sort(randomArray, strategy);
-
-            assertTrue(isSortedAscending(sorted.getArray()));
-            assertEquals(randomArray.getLength(), sorted.getLength());
+            List<ArrayEntity> result = sortService.sort(originalList, strategy);
+            ArrayEntity firstResult = result.stream().findFirst().orElseThrow();
+            assertArrayEquals(originalData == null ? new int[0] : originalData, original.getArray());
+            assertArrayEquals(expectedSorted == null ? new int[0] : expectedSorted, firstResult.getArray());
         }
     }
 
-    @Test
-    void testSortConsistencyAcrossStrategies() {
-        ArrayEntity testArray = factory.createArray(new int[] {15, 3, 9, 1, 12, 6});
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should preserve array length")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort preserves array length")
+    void sortPreservesArrayLength(int[] originalData, int[] expectedSorted) {
+        ArrayEntity original = factory.createArray(originalData == null ? null : originalData.clone());
+        List<ArrayEntity> originalList = List.of(original);
 
-        ArrayEntity mergeSorted = sortService.sort(testArray, SortStrategy.Merge);
-        ArrayEntity heapSorted = sortService.sort(testArray, SortStrategy.Heap);
-        ArrayEntity insertionSorted = sortService.sort(testArray, SortStrategy.Insertion);
-        ArrayEntity selectionSorted = sortService.sort(testArray, SortStrategy.Selection);
-        ArrayEntity bubbleSorted = sortService.sort(testArray, SortStrategy.Bubble);
-
-        assertArrayEquals(mergeSorted.getArray(), heapSorted.getArray());
-        assertArrayEquals(heapSorted.getArray(), insertionSorted.getArray());
-        assertArrayEquals(insertionSorted.getArray(), selectionSorted.getArray());
-        assertArrayEquals(selectionSorted.getArray(), bubbleSorted.getArray());
+        for (SortStrategy strategy : SortStrategy.values()) {
+            List<ArrayEntity> sorted = sortService.sort(originalList, strategy);
+            ArrayEntity firstSorted = sorted.stream().findFirst().orElseThrow();
+            assertEquals(original.getLength(), firstSorted.getLength());
+            assertArrayEquals(expectedSorted == null ? new int[0] : expectedSorted, firstSorted.getArray());
+        }
     }
 
-    @Test
-    void testSortEmptyArrayReturnsEmpty() {
-        ArrayEntity emptyArray = factory.createArray(new int[] {});
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should create new ArrayEntity instances")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort creates new ArrayEntity instances")
+    void sortCreatesNewArrayEntityInstances(int[] originalData, int[] expectedSorted) {
+        ArrayEntity original = factory.createArray(originalData == null ? null : originalData.clone());
+        List<ArrayEntity> originalList = List.of(original);
 
-        ArrayEntity sorted = sortService.sort(emptyArray, SortStrategy.Merge);
-
-        assertEquals(0, sorted.getLength());
-        assertTrue(sorted.isEmpty());
+        for (SortStrategy strategy : SortStrategy.values()) {
+            List<ArrayEntity> sorted = sortService.sort(originalList, strategy);
+            assertEquals(1, sorted.size());
+            ArrayEntity sortedEntity = sorted.stream().findFirst().orElseThrow();
+            assertNotSame(original, sortedEntity);
+            assertNotEquals(original.getId(), sortedEntity.getId());
+            assertArrayEquals(expectedSorted == null ? new int[0] : expectedSorted, sortedEntity.getArray());
+        }
     }
 
-    @Test
-    void testSortSingleElementArrayReturnsSame() {
-        ArrayEntity singleElement = factory.createArray(new int[] {99});
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should handle empty arrays")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort handles empty arrays")
+    void sortHandlesEmptyArrays(int[] originalData, int[] expectedSorted) {
+        if (originalData == null || originalData.length == 0) {
+            ArrayEntity emptyArray = factory.createArray(originalData);
+            List<ArrayEntity> arrays = List.of(emptyArray);
 
-        ArrayEntity sorted = sortService.sort(singleElement, SortStrategy.Selection);
-
-        assertEquals(1, sorted.getLength());
-        assertEquals(99, sorted.getFirst());
-        assertArrayEquals(new int[] {99}, sorted.getArray());
-    }
-
-    @Test
-    void testSortArrayWithNegativeAndPositiveNumbers() {
-        ArrayEntity mixedArray = factory.createArray(new int[] {-10, 5, -3, 0, 8, -1});
-
-        ArrayEntity sorted = sortService.sort(mixedArray, SortStrategy.Insertion);
-
-        int[] expectedSorted = {-10, -3, -1, 0, 5, 8};
-        assertArrayEquals(expectedSorted, sorted.getArray());
-    }
-
-    @Test
-    void testSortLargeSequentialArray() {
-        ArrayEntity largeSeq = factory.createSequentialArray("LargeSeq", 1, 1000);
-
-        ArrayEntity sorted = sortService.sort(largeSeq, SortStrategy.Heap);
-
-        assertTrue(isSortedAscending(sorted.getArray()));
-        assertEquals(1000, sorted.getLength());
-        assertEquals(1, sorted.getFirst());
-    }
-
-    @Test
-    void testSortPatternArrayWithNegativeStep() {
-        ArrayEntity pattern = factory.createArrayWithPattern("NegPattern", 10, 50, -5);
-
-        ArrayEntity sorted = sortService.sort(pattern, SortStrategy.Bubble);
-
-        assertTrue(isSortedAscending(sorted.getArray()));
-        assertEquals(10, sorted.getLength());
-    }
-
-    @Test
-    void testSortRangeArrayWithCustomStep() {
-        ArrayEntity range = factory.createArrayFromRange("CustomRange", 5, 25, 3);
-
-        ArrayEntity sorted = sortService.sort(range, SortStrategy.Selection);
-
-        assertTrue(isSortedAscending(sorted.getArray()));
-        int[] expectedOriginal = {5, 8, 11, 14, 17, 20, 23};
-        assertEquals(expectedOriginal.length, sorted.getLength());
-    }
-
-    @Test
-    void testSortPreservesArrayLength() {
-        int[] sizes = {0, 1, 5, 10, 50, 100};
-
-        for (int size : sizes) {
-            if (size == 0) {
-                ArrayEntity array = factory.createArray(new int[] {});
-                ArrayEntity sorted = sortService.sort(array, SortStrategy.Merge);
-                assertEquals(0, sorted.getLength());
-            } else {
-                ArrayEntity array = factory.createRandomArray("SizeTest", size, 1, 100);
-                ArrayEntity sorted = sortService.sort(array, SortStrategy.Merge);
-                assertEquals(size, sorted.getLength());
+            for (SortStrategy strategy : SortStrategy.values()) {
+                List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+                assertNotNull(sorted);
+                assertEquals(1, sorted.size());
+                ArrayEntity first = sorted.stream().findFirst().orElseThrow();
+                assertEquals(0, first.getLength());
+                assertTrue(first.isEmpty());
+                assertArrayEquals(expectedSorted == null ? new int[0] : expectedSorted, first.getArray());
             }
         }
     }
 
-    @Test
-    void testSortWithExtremeValues() {
-        ArrayEntity extremes = factory.createArray(new int[] {
-                Integer.MAX_VALUE, Integer.MIN_VALUE, 0, -1, 1
-        });
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should handle single element arrays")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort handles single element arrays")
+    void sortHandlesSingleElementArrays(int[] originalData, int[] expectedSorted) {
+        if (originalData != null && originalData.length == 1) {
+            ArrayEntity singleElement = factory.createArray(originalData);
+            List<ArrayEntity> arrays = List.of(singleElement);
 
-        ArrayEntity sorted = sortService.sort(extremes, SortStrategy.Heap);
-
-        assertEquals(Integer.MIN_VALUE, sorted.getArray()[0]);
-        assertEquals(Integer.MAX_VALUE, sorted.getArray()[sorted.getLength() - 1]);
-        assertTrue(isSortedAscending(sorted.getArray()));
-    }
-
-    @Test
-    void testSortStability() {
-        ArrayEntity withDuplicates = factory.createArray(new int[] {5, 2, 8, 2, 1, 5, 3});
-
-        ArrayEntity sorted = sortService.sort(withDuplicates, SortStrategy.Merge);
-
-        int[] expectedSorted = {1, 2, 2, 3, 5, 5, 8};
-        assertArrayEquals(expectedSorted, sorted.getArray());
-        assertTrue(isSortedAscending(sorted.getArray()));
-    }
-
-    private boolean isSortedAscending(int[] array) {
-        for (int i = 1; i < array.length; i++) {
-            if (array[i] < array[i - 1]) {
-                return false;
+            for (SortStrategy strategy : SortStrategy.values()) {
+                List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+                assertEquals(1, sorted.size());
+                ArrayEntity sortedEntity = sorted.stream().findFirst().orElseThrow();
+                assertEquals(1, sortedEntity.getLength());
+                assertEquals(originalData[0], sortedEntity.getFirst());
+                assertArrayEquals(expectedSorted == null ? new int[] {originalData[0]} : expectedSorted,
+                        sortedEntity.getArray());
             }
         }
-        return true;
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should handle already sorted arrays")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort handles already sorted arrays")
+    void sortHandlesAlreadySortedArrays(int[] originalData, int[] expectedSorted) {
+        if (Arrays.equals(originalData, expectedSorted)) {
+            ArrayEntity alreadySorted = factory.createArray(originalData);
+            List<ArrayEntity> arrays = List.of(alreadySorted);
+
+            for (SortStrategy strategy : SortStrategy.values()) {
+                List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+                assertEquals(1, sorted.size());
+                assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should handle reverse sorted arrays")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort handles reverse sorted arrays")
+    void sortHandlesReverseSortedArrays(int[] originalData, int[] expectedSorted) {
+        if (Arrays.equals(originalData, Arrays.stream(expectedSorted).sorted().toArray())) {
+            ArrayEntity reverseSorted = factory.createArray(originalData);
+            List<ArrayEntity> arrays = List.of(reverseSorted);
+
+            for (SortStrategy strategy : SortStrategy.values()) {
+                List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+                assertEquals(1, sorted.size());
+                assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should handle arrays with duplicates")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort handles arrays with duplicates")
+    void sortHandlesArraysWithDuplicates(int[] originalData, int[] expectedSorted) {
+        if (Arrays.stream(originalData).distinct().count() < originalData.length) {
+            ArrayEntity withDuplicates = factory.createArray(originalData);
+            List<ArrayEntity> arrays = List.of(withDuplicates);
+
+            for (SortStrategy strategy : SortStrategy.values()) {
+                List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+                assertEquals(1, sorted.size());
+                assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should handle arrays with negative numbers")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort handles arrays with negative numbers")
+    void sortHandlesArraysWithNegativeNumbers(int[] originalData, int[] expectedSorted) {
+        if (Arrays.stream(originalData).anyMatch(n -> n < 0)) {
+            ArrayEntity withNegatives = factory.createArray(originalData);
+            List<ArrayEntity> arrays = List.of(withNegatives);
+
+            for (SortStrategy strategy : SortStrategy.values()) {
+                List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+                assertEquals(1, sorted.size());
+                assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should handle arrays with extreme values")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort handles arrays with extreme values")
+    void sortHandlesArraysWithExtremeValues(int[] originalData, int[] expectedSorted) {
+        if (Arrays.stream(originalData).anyMatch(n -> n == Integer.MAX_VALUE || n == Integer.MIN_VALUE)) {
+            ArrayEntity extremeValues = factory.createArray(originalData);
+            List<ArrayEntity> arrays = List.of(extremeValues);
+
+            for (SortStrategy strategy : SortStrategy.values()) {
+                List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+                assertEquals(1, sorted.size());
+                assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} should create new ArrayEntity instances")
+    @ArgumentsSource(SortStrategyArgumentsProvider.class)
+    @DisplayName("Sort returns new ArrayEntity instances")
+    void sortReturnsNewArrayEntities(SortStrategy strategy) {
+        ArrayEntity original = factory.createArray(new int[] {3, 1, 4, 1, 5});
+        List<ArrayEntity> originalList = List.of(original);
+
+        List<ArrayEntity> sorted = sortService.sort(originalList, strategy);
+
+        assertNotNull(sorted);
+        assertEquals(1, sorted.size());
+        ArrayEntity sortedEntity = sorted.getFirst();
+        assertNotSame(original, sortedEntity);
+        assertNotEquals(original.getId(), sortedEntity.getId());
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} with array {1} should sort correctly")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("Sort produces correct results")
+    void sortProducesCorrectResults(int[] originalData, int[] expectedSorted) {
+        ArrayEntity original = factory.createArray(originalData.clone());
+        List<ArrayEntity> originalList = List.of(original);
+
+        for (SortStrategy strategy : SortStrategy.values()) {
+            List<ArrayEntity> sorted = sortService.sort(originalList, strategy);
+
+            assertNotNull(sorted);
+            assertEquals(1, sorted.size());
+            ArrayEntity sortedEntity = sorted.getFirst();
+            assertArrayEquals(expectedSorted, sortedEntity.getArray());
+        }
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} should handle empty lists")
+    @ArgumentsSource(SortStrategyArgumentsProvider.class)
+    @DisplayName("Sort handles empty lists")
+    void sortHandlesEmptyLists(SortStrategy strategy) {
+        List<ArrayEntity> emptyList = List.of();
+
+        List<ArrayEntity> result = sortService.sort(emptyList, strategy);
+
+        assertSame(emptyList, result);
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} should preserve array length")
+    @ArgumentsSource(SortStrategyArgumentsProvider.class)
+    @DisplayName("Sort preserves array length")
+    void sortPreservesArrayLength(SortStrategy strategy) {
+        ArrayEntity array1 = factory.createArray(new int[] {5, 2, 8});
+        ArrayEntity array2 = factory.createArray(new int[] {1, 9, 3, 7});
+        List<ArrayEntity> arrays = List.of(array1, array2);
+
+        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+
+        assertEquals(2, sorted.size());
+        assertEquals(3, sorted.getFirst().getLength());
+        assertEquals(4, sorted.stream().skip(1).findFirst().orElseThrow().getLength());
+    }
+
+    @ParameterizedTest(name = "Sort strategy {0} should maintain consistency across multiple arrays")
+    @ArgumentsSource(SortStrategyArgumentsProvider.class)
+    @DisplayName("Sort maintains consistency across multiple arrays")
+    void sortMaintainsConsistencyAcrossMultipleArrays(SortStrategy strategy) {
+        ArrayEntity array1 = factory.createArray(new int[] {15, 3, 9, 1, 12});
+        ArrayEntity array2 = factory.createArray(new int[] {8, 2, 6, 4});
+        List<ArrayEntity> arrays = List.of(array1, array2);
+
+        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+
+        assertEquals(2, sorted.size());
+        assertTrue(isSorted(sorted.getFirst().getArray()));
+        assertTrue(isSorted(sorted.stream().skip(1).findFirst().orElseThrow().getArray()));
+    }
+
+    @ParameterizedTest(name = "All strategies should produce identical results for array {0}")
+    @ArgumentsSource(ArrayArgumentsProvider.class)
+    @DisplayName("All strategies produce identical results")
+    void allStrategiesProduceIdenticalResults(int[] originalData, int[] expectedSorted) {
+        ArrayEntity testArray = factory.createArray(originalData == null ? new int[0] : originalData.clone());
+        List<ArrayEntity> testList = List.of(testArray);
+
+        List<ArrayEntity> mergeResult = sortService.sort(testList, SortStrategy.MERGE);
+        List<ArrayEntity> heapResult = sortService.sort(testList, SortStrategy.HEAP);
+        List<ArrayEntity> insertionResult = sortService.sort(testList, SortStrategy.INSERTION);
+        List<ArrayEntity> selectionResult = sortService.sort(testList, SortStrategy.SELECTION);
+        List<ArrayEntity> bubbleResult = sortService.sort(testList, SortStrategy.BUBBLE);
+
+        int[] mergeArr = mergeResult.stream().findFirst().orElseThrow().getArray();
+        int[] heapArr = heapResult.stream().findFirst().orElseThrow().getArray();
+        int[] insertionArr = insertionResult.stream().findFirst().orElseThrow().getArray();
+        int[] selectionArr = selectionResult.stream().findFirst().orElseThrow().getArray();
+        int[] bubbleArr = bubbleResult.stream().findFirst().orElseThrow().getArray();
+
+        assertArrayEquals(mergeArr, heapArr);
+        assertArrayEquals(heapArr, insertionArr);
+        assertArrayEquals(insertionArr, selectionArr);
+        assertArrayEquals(selectionArr, bubbleArr);
+
+        if (expectedSorted != null) {
+            assertArrayEquals(expectedSorted, mergeArr);
+        }
+    }
+
+    private boolean isSorted(int[] array) {
+        return IntStream.range(1, array.length).noneMatch(i -> array[i] < array[i - 1]);
     }
 }

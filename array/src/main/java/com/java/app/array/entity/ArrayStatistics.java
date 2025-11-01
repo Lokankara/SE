@@ -4,12 +4,11 @@ import com.java.app.array.service.ArrayCalculateService;
 import com.java.app.array.validator.ArrayValidator;
 
 public class ArrayStatistics {
-    private final int sum;
+    private final long sum;
     private final double average;
     private final int max;
     private final int min;
     private final int count;
-
 
     public ArrayStatistics(ArrayEntity entity) {
         ArrayCalculateService service = new ArrayCalculateService(new ArrayValidator());
@@ -20,14 +19,14 @@ public class ArrayStatistics {
             this.max = 0;
             this.min = 0;
         } else {
-            this.sum = service.max(entity);
+            this.sum = service.sum(entity);
             this.average = service.average(entity);
             this.max = service.max(entity);
             this.min = service.min(entity);
         }
     }
 
-    public int getSum() {
+    public long getSum() {
         return sum;
     }
 
@@ -45,5 +44,12 @@ public class ArrayStatistics {
 
     public int getCount() {
         return count;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "ArrayStatistics'{'sum=%s, average==%s, max==%s, min==%s, count==%s'}'",
+                sum, average, max, min, count);
     }
 }

@@ -214,7 +214,7 @@ class InMemoryArrayRepositoryTest {
         repository.add(entity1);
         repository.add(entity2);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.BY_ID);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.ID);
 
         assertEquals(3, sorted.size());
         assertTrue(sorted.getFirst().getId() < sorted.get(1).getId());
@@ -231,7 +231,7 @@ class InMemoryArrayRepositoryTest {
         repository.add(entityA);
         repository.add(entityB);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.BY_NAME);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.NAME);
 
         assertEquals(3, sorted.size());
         assertEquals("Alice", sorted.getFirst().getName());
@@ -249,7 +249,7 @@ class InMemoryArrayRepositoryTest {
         repository.add(entity2);
         repository.add(entity3);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.BY_FIRST_ELEMENT);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.FIRST);
 
         assertEquals(3, sorted.size());
         assertEquals(2, sorted.getFirst().getFirst());
@@ -267,7 +267,7 @@ class InMemoryArrayRepositoryTest {
         repository.add(shortArray);
         repository.add(mediumArray);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.BY_LENGTH);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.LENGTH);
 
         assertEquals(3, sorted.size());
         assertEquals(1, sorted.getFirst().getLength());
@@ -277,7 +277,7 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testSortEmptyRepository() {
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.BY_ID);
+        List<ArrayEntity> sorted = repository.sortBy(ArrayComparators.ID);
 
         assertEquals(0, sorted.size());
         assertTrue(sorted.isEmpty());
@@ -303,8 +303,9 @@ class InMemoryArrayRepositoryTest {
     void testRepositoryObserverIntegration() {
         ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
         repository.add(entity);
-
+        System.out.println(entity);
         ArrayStatistics initialStats = warehouse.getStatistics(entity.getId());
+        System.out.println(initialStats);
         assertEquals(6, initialStats.getSum());
 
         entity.setArray(0, 10);

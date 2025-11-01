@@ -23,7 +23,7 @@ class WarehouseTest {
     @Test
     void testWarehouseUpdatesOnArrayEntityChange() {
         ArrayEntity array = factory.createArray(new int[] {1, 2, 3, 4, 5});
-        array.addListener(warehouse);
+        array.attach(warehouse);
 
         array.setArray(0, 10);
 
@@ -37,8 +37,8 @@ class WarehouseTest {
         ArrayEntity array1 = factory.createArray(new int[] {1, 2, 3});
         ArrayEntity array2 = factory.createArray(new int[] {4, 5, 6});
 
-        array1.addListener(warehouse);
-        array2.addListener(warehouse);
+        array1.attach(warehouse);
+        array2.attach(warehouse);
 
         array1.setArray(0, 100);
         array2.setArray(0, 200);
@@ -54,7 +54,7 @@ class WarehouseTest {
     @Test
     void testWarehouseRemovesStatistics() {
         ArrayEntity array = factory.createArray(new int[] {1, 2, 3});
-        array.addListener(warehouse);
+        array.attach(warehouse);
         array.setArray(0, 10);
 
         ArrayStatistics stats = warehouse.getStatistics(array.getId());
@@ -69,7 +69,7 @@ class WarehouseTest {
     @Test
     void testWarehouseCalculatesCorrectStatistics() {
         ArrayEntity array = factory.createArray(new int[] {10, 20, 30});
-        array.addListener(warehouse);
+        array.attach(warehouse);
 
         array.setArray(1, 25);
 
@@ -81,7 +81,7 @@ class WarehouseTest {
     @Test
     void testWarehouseHandlesEmptyArray() {
         ArrayEntity emptyArray = factory.createArray(new int[] {});
-        emptyArray.addListener(warehouse);
+        emptyArray.attach(warehouse);
 
         warehouse.onChanged(emptyArray);
 
@@ -95,7 +95,7 @@ class WarehouseTest {
     @Test
     void testWarehouseUpdatesOnMultipleChanges() {
         ArrayEntity array = factory.createArray(new int[] {5, 10, 15});
-        array.addListener(warehouse);
+        array.attach(warehouse);
 
         array.setArray(0, 50);
         ArrayStatistics stats1 = warehouse.getStatistics(array.getId());
@@ -116,7 +116,7 @@ class WarehouseTest {
     @Test
     void testWarehouseReflectsCurrentArrayState() {
         ArrayEntity array = factory.createArray(new int[] {1, 1, 1});
-        array.addListener(warehouse);
+        array.attach(warehouse);
 
         array.setArray(0, 100);
         array.setArray(1, 200);

@@ -1,19 +1,15 @@
 package com.java.app.array.entity;
 
-import com.java.app.array.observer.Listener;
-import com.java.app.array.observer.Observable;
+import com.java.app.array.observer.ArrayObservable;
 import com.java.app.array.validator.ArrayValidator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-public final class ArrayEntity implements Observable<ArrayEntity> {
+public final class ArrayEntity extends ArrayObservable {
 
     private final int id;
     private final String name;
     private final int[] array;
-    private final List<Listener<ArrayEntity>> observers = new ArrayList<>();
 
     public ArrayEntity() {
         this.id = 0;
@@ -22,7 +18,7 @@ public final class ArrayEntity implements Observable<ArrayEntity> {
     }
 
     private int[] updateState(int[] ints) {
-        notifyListeners();
+        notifyListeners(this);
         return ArrayValidator.getIfNull(ints.clone(), new int[0]);
     }
 
@@ -62,25 +58,10 @@ public final class ArrayEntity implements Observable<ArrayEntity> {
         return array[0];
     }
 
-    @Override
-    public void addListener(Listener<ArrayEntity> listener) {
-        observers.add(listener);
-    }
-
-    @Override
-    public void removeListener(Listener<ArrayEntity> listener) {
-        observers.remove(listener);
-    }
-
-    @Override
-    public void notifyListeners() {
-        observers.forEach(listener -> listener.onChanged(this));
-    }
-
     public void setArray(int index, int value) {
         ArrayValidator.validate(index < 0 || index >= array.length, "Size out of range");
         array[index] = value;
-        notifyListeners();
+        notifyListeners(this);
     }
 
     @Override

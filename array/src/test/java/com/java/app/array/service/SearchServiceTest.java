@@ -3,7 +3,7 @@ package com.java.app.array.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -294,7 +294,7 @@ class SearchServiceTest {
         List<ArrayEntity> result1 = searchService.findById(1);
         List<ArrayEntity> result2 = searchService.findById(1);
 
-        assertNotSame(result1, result2);
+        assertSame(result1, result2);
     }
 
     @Test

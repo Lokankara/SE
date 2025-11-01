@@ -1,11 +1,11 @@
 package com.java.app.array.dao;
 
+import com.java.app.array.comparator.ArrayComparators;
 import com.java.app.array.entity.ArrayEntity;
 import com.java.app.array.entity.Warehouse;
 import com.java.app.array.specification.Specification;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
@@ -21,7 +21,7 @@ public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
     @Override
     public void add(ArrayEntity entity) {
         entities.add(entity);
-        entity.addListener(warehouse);
+        entity.attach(warehouse);
         warehouse.onChanged(entity);
     }
 
@@ -52,9 +52,9 @@ public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
     }
 
     @Override
-    public List<ArrayEntity> sortBy(Comparator<ArrayEntity> comparator) {
+    public List<ArrayEntity> sortBy(ArrayComparators comparator) {
         return entities.stream()
-                .sorted(comparator)
+                .sorted(comparator.getComparator())
                 .toList();
     }
 
