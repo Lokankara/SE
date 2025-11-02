@@ -1,19 +1,19 @@
 package com.java.app.array.strategy;
 
-import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.factory.ArrayFactory;
+import com.java.app.array.entity.integer.IntArrayEntity;
+import com.java.app.array.factory.IntArrayFactory;
 
 public abstract class SortAlgorithm {
 
-    private final ArrayFactory factory;
+    private final IntArrayFactory factory;
 
     protected SortAlgorithm() {
-        this.factory = new ArrayFactory();
+        this.factory = new IntArrayFactory();
     }
 
-    public abstract ArrayEntity sort(int[] array);
+    public abstract IntArrayEntity sort(Integer[] array);
 
-    public ArrayFactory getFactory() {
+    public IntArrayFactory getFactory() {
         return factory;
     }
 }

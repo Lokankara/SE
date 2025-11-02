@@ -1,8 +1,8 @@
 package com.java.app.array.specification;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 
-public class IdSpecification implements Specification<ArrayEntity> {
+public class IdSpecification implements Specification<IntArrayEntity> {
     private final int targetId;
 
     public IdSpecification(int targetId) {
@@ -10,7 +10,7 @@ public class IdSpecification implements Specification<ArrayEntity> {
     }
 
     @Override
-    public boolean specify(ArrayEntity entity) {
+    public boolean specify(IntArrayEntity entity) {
         return entity.getId() == targetId;
     }
 }

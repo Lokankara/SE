@@ -1,7 +1,7 @@
 package com.java.app.array.strategy;
 
 import com.java.app.array.builder.ArrayBuilder;
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 import com.java.app.array.strategy.algorithm.BubbleSort;
 import com.java.app.array.strategy.algorithm.HeapSort;
 import com.java.app.array.strategy.algorithm.InsertionSort;
@@ -28,12 +28,12 @@ public enum SortStrategy {
         return algorithm;
     }
 
-    public List<ArrayEntity> sort(List<ArrayEntity> arrays) {
+    public List<IntArrayEntity> sort(List<IntArrayEntity> arrays) {
         return arrays == null || arrays.isEmpty()
                 ? arrays
                 : arrays.stream()
                 .map(e -> new ArrayBuilder<>(
-                        ArrayEntity::new)
+                        IntArrayEntity::new)
                         .setName(e.getName())
                         .setArray(algorithm.sort(e.getArray()).getArray())
                         .build())

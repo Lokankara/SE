@@ -8,11 +8,13 @@ public class ArrayConverter {
 
     private static final String DELIMITER = "[,;\\s-]+";
 
-    public int[] parseToArray(String line) throws InvalidArrayDataException {
+    public Integer[] parseToArray(String line) throws InvalidArrayDataException {
         try {
             return Arrays.stream(line.split(DELIMITER))
                     .mapToInt(Integer::parseInt)
-                    .toArray();
+                    .boxed()
+                    .toArray(Integer[]::new);
+
         } catch (Exception e) {
             throw new InvalidArrayDataException("Invalid data for parsing to integer: " + line, e);
         }

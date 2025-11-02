@@ -4,28 +4,29 @@ import com.java.app.array.builder.ArrayBuilder;
 import com.java.app.array.comparator.ArrayComparator;
 import com.java.app.array.dao.ArrayRepository;
 import com.java.app.array.dao.InMemoryArrayRepository;
-import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.entity.IntArrayStatistics;
-import com.java.app.array.entity.Warehouse;
+import com.java.app.array.entity.integer.IntArrayEntity;
+import com.java.app.array.entity.integer.IntArrayStatistics;
+import com.java.app.array.entity.integer.IntWarehouse;
 import com.java.app.array.specification.Specification;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class ArrayService {
-    private final ArrayRepository<ArrayEntity> repository;
-    private final Warehouse warehouse;
+    private final ArrayRepository<IntArrayEntity> repository;
+    private final IntWarehouse intWarehouse;
 
     public ArrayService() {
         this.repository = new InMemoryArrayRepository();
-        this.warehouse = Warehouse.getInstance();
+        this.intWarehouse = IntWarehouse.getInstance();
     }
 
-    public List<ArrayEntity> sort(ArrayComparator comparator) {
+    public List<IntArrayEntity> sort(Comparator<IntArrayEntity> comparator) {
         return repository.sortBy(comparator);
     }
 
-    public void createArray(String name, int[] array) {
-        ArrayEntity entity = new ArrayBuilder<>(ArrayEntity::new)
+    public void createArray(String name, Integer[] array) {
+        IntArrayEntity entity = new ArrayBuilder<>(IntArrayEntity::new)
                 .setName(name)
                 .setArray(array)
                 .build();
@@ -37,16 +38,16 @@ public class ArrayService {
         repository.removeById(id);
     }
 
-    public List<ArrayEntity> searchArrays(Specification<ArrayEntity> specification) {
+    public List<IntArrayEntity> searchArrays(Specification<IntArrayEntity> specification) {
         return repository.findBySpecification(specification);
     }
 
-    public List<ArrayEntity> sortArrays(ArrayComparator comparator) {
+    public List<IntArrayEntity> sortArrays(ArrayComparator comparator) {
         return repository.sortBy(comparator);
     }
 
     public IntArrayStatistics getArrayStatistics(int id) {
-        return warehouse.getStatistics(id);
+        return intWarehouse.getStatistics(id);
     }
 
     public void updateArrayElement(int arrayId, int elementIndex, int newValue) {

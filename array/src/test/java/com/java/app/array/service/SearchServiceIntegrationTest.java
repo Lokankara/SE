@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 
 class SearchServiceIntegrationTest {
 
@@ -57,12 +57,12 @@ class SearchServiceIntegrationTest {
 
     @Test
     void testSearchServiceListElementTypes() {
-        List<ArrayEntity> result1 = searchService.findById(1);
-        List<ArrayEntity> result2 = searchService.findByName("test");
-        List<ArrayEntity> result3 = searchService.findBySumGreaterThan(10);
-        List<ArrayEntity> result4 = searchService.findBySumLessThan(10);
-        List<ArrayEntity> result5 = searchService.findByAverageGreaterThan(5.0);
-        List<ArrayEntity> result6 = searchService.findByMaxGreaterThan(10);
+        List<IntArrayEntity> result1 = searchService.findById(1);
+        List<IntArrayEntity> result2 = searchService.findByName("test");
+        List<IntArrayEntity> result3 = searchService.findBySumGreaterThan(10);
+        List<IntArrayEntity> result4 = searchService.findBySumLessThan(10);
+        List<IntArrayEntity> result5 = searchService.findByAverageGreaterThan(5.0);
+        List<IntArrayEntity> result6 = searchService.findByMaxGreaterThan(10);
 
         assertTrue(result1 instanceof List<?>);
         assertTrue(result2 instanceof List<?>);
@@ -94,7 +94,7 @@ class SearchServiceIntegrationTest {
     @Test
     void testSearchServiceMemoryUsage() {
         for (int i = 0; i < 100; i++) {
-            List<ArrayEntity> result = searchService.findById(i);
+            List<IntArrayEntity> result = searchService.findById(i);
             assertNotNull(result);
             assertTrue(result.isEmpty());
         }

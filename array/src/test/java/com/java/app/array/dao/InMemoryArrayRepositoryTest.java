@@ -8,10 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.java.app.array.comparator.ArrayComparator;
-import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.entity.IntArrayStatistics;
-import com.java.app.array.entity.Warehouse;
-import com.java.app.array.factory.ArrayFactory;
+import com.java.app.array.entity.ArrayStatistics;
+import com.java.app.array.entity.integer.IntArrayEntity;
+import com.java.app.array.entity.integer.IntArrayStatistics;
+import com.java.app.array.entity.integer.IntWarehouse;
+import com.java.app.array.factory.IntArrayFactory;
 import com.java.app.array.specification.IdSpecification;
 import com.java.app.array.specification.NameSpecification;
 import com.java.app.array.specification.SumGreaterThanSpecification;
@@ -23,41 +24,41 @@ import java.util.List;
 class InMemoryArrayRepositoryTest {
 
     private InMemoryArrayRepository repository;
-    private ArrayFactory factory;
-    private Warehouse warehouse;
+    private IntArrayFactory factory;
+    private IntWarehouse intWarehouse;
 
     @BeforeEach
     void setUp() {
         repository = new InMemoryArrayRepository();
-        factory = new ArrayFactory();
-        warehouse = Warehouse.getInstance();
+        factory = new IntArrayFactory();
+        intWarehouse = IntWarehouse.getInstance();
     }
 
     @Test
     void testAddEntityRegistersListener() {
-        ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
+        IntArrayEntity entity = factory.createArray(new Integer[] {1, 2, 3});
 
         repository.add(entity);
 
-        List<ArrayEntity> allEntities = repository.findAll();
+        List<IntArrayEntity> allEntities = repository.findAll();
         assertEquals(1, allEntities.size());
         assertTrue(allEntities.contains(entity));
 
-        IntArrayStatistics stats = warehouse.getStatistics(entity.getId());
+        ArrayStatistics<?> stats = intWarehouse.getStatistics(entity.getId());
         assertNotNull(stats);
     }
 
     @Test
     void testAddMultipleEntities() {
-        ArrayEntity entity1 = factory.createArray(new int[] {1, 2, 3});
-        ArrayEntity entity2 = factory.createArray(new int[] {4, 5, 6});
-        ArrayEntity entity3 = factory.createArray(new int[] {7, 8, 9});
+        IntArrayEntity entity1 = factory.createArray(new Integer[] {1, 2, 3});
+        IntArrayEntity entity2 = factory.createArray(new Integer[] {4, 5, 6});
+        IntArrayEntity entity3 = factory.createArray(new Integer[] {7, 8, 9});
 
         repository.add(entity1);
         repository.add(entity2);
         repository.add(entity3);
 
-        List<ArrayEntity> allEntities = repository.findAll();
+        List<IntArrayEntity> allEntities = repository.findAll();
         assertEquals(3, allEntities.size());
         assertTrue(allEntities.contains(entity1));
         assertTrue(allEntities.contains(entity2));
@@ -66,75 +67,75 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testRemoveEntityUnregistersListener() {
-        ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
+        IntArrayEntity entity = factory.createArray(new Integer[] {1, 2, 3});
         repository.add(entity);
 
-        IntArrayStatistics initialStats = warehouse.getStatistics(entity.getId());
+        ArrayStatistics<?> initialStats = intWarehouse.getStatistics(entity.getId());
         assertNotNull(initialStats);
 
         repository.remove(entity);
 
-        List<ArrayEntity> allEntities = repository.findAll();
+        List<IntArrayEntity> allEntities = repository.findAll();
         assertEquals(0, allEntities.size());
         assertFalse(allEntities.contains(entity));
 
-        IntArrayStatistics removedStats = warehouse.getStatistics(entity.getId());
+        ArrayStatistics<?> removedStats = intWarehouse.getStatistics(entity.getId());
         assertNull(removedStats);
     }
 
     @Test
     void testRemoveNonExistentEntity() {
-        ArrayEntity entity1 = factory.createArray(new int[] {1, 2, 3});
-        ArrayEntity entity2 = factory.createArray(new int[] {4, 5, 6});
+        IntArrayEntity entity1 = factory.createArray(new Integer[] {1, 2, 3});
+        IntArrayEntity entity2 = factory.createArray(new Integer[] {4, 5, 6});
 
         repository.add(entity1);
         repository.remove(entity2);
 
-        List<ArrayEntity> allEntities = repository.findAll();
+        List<IntArrayEntity> allEntities = repository.findAll();
         assertEquals(1, allEntities.size());
         assertTrue(allEntities.contains(entity1));
     }
 
     @Test
     void testRemoveById() {
-        ArrayEntity entity1 = factory.createArray(new int[] {1, 2, 3});
-        ArrayEntity entity2 = factory.createArray(new int[] {4, 5, 6});
+        IntArrayEntity entity1 = factory.createArray(new Integer[] {1, 2, 3});
+        IntArrayEntity entity2 = factory.createArray(new Integer[] {4, 5, 6});
 
         repository.add(entity1);
         repository.add(entity2);
 
         repository.removeById(entity1.getId());
 
-        List<ArrayEntity> allEntities = repository.findAll();
+        List<IntArrayEntity> allEntities = repository.findAll();
         assertEquals(1, allEntities.size());
         assertFalse(allEntities.contains(entity1));
         assertTrue(allEntities.contains(entity2));
 
-        IntArrayStatistics stats = warehouse.getStatistics(entity1.getId());
+        ArrayStatistics<?> stats = intWarehouse.getStatistics(entity1.getId());
         assertNull(stats);
     }
 
     @Test
     void testRemoveByNonExistentId() {
-        ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
+        IntArrayEntity entity = factory.createArray(new Integer[] {1, 2, 3});
         repository.add(entity);
 
         repository.removeById(99999);
 
-        List<ArrayEntity> allEntities = repository.findAll();
+        List<IntArrayEntity> allEntities = repository.findAll();
         assertEquals(1, allEntities.size());
         assertTrue(allEntities.contains(entity));
     }
 
     @Test
     void testFindBySpecificationId() {
-        ArrayEntity entity1 = factory.createArray(new int[] {1, 2, 3});
-        ArrayEntity entity2 = factory.createArray(new int[] {4, 5, 6});
+        IntArrayEntity entity1 = factory.createArray(new Integer[] {1, 2, 3});
+        IntArrayEntity entity2 = factory.createArray(new Integer[] {4, 5, 6});
 
         repository.add(entity1);
         repository.add(entity2);
 
-        List<ArrayEntity> found = repository.findBySpecification(new IdSpecification(entity1.getId()));
+        List<IntArrayEntity> found = repository.findBySpecification(new IdSpecification(entity1.getId()));
 
         assertEquals(1, found.size());
         assertEquals(entity1, found.getFirst());
@@ -142,13 +143,13 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testFindBySpecificationName() {
-        ArrayEntity entity1 = factory.createRandomArray("TestArray1", 3, 1, 10);
-        ArrayEntity entity2 = factory.createRandomArray("TestArray2", 3, 1, 10);
+        IntArrayEntity entity1 = factory.createRandomArray("TestArray1", 3, 1, 10);
+        IntArrayEntity entity2 = factory.createRandomArray("TestArray2", 3, 1, 10);
 
         repository.add(entity1);
         repository.add(entity2);
 
-        List<ArrayEntity> found = repository.findBySpecification(new NameSpecification("TestArray1"));
+        List<IntArrayEntity> found = repository.findBySpecification(new NameSpecification("TestArray1"));
 
         assertEquals(1, found.size());
         assertEquals(entity1, found.getFirst());
@@ -156,13 +157,13 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testFindBySpecificationSum() {
-        ArrayEntity smallSum = factory.createArray(new int[] {1, 1, 1});
-        ArrayEntity largeSum = factory.createArray(new int[] {10, 20, 30});
+        IntArrayEntity smallSum = factory.createArray(new Integer[] {1, 1, 1});
+        IntArrayEntity largeSum = factory.createArray(new Integer[] {10, 20, 30});
 
         repository.add(smallSum);
         repository.add(largeSum);
 
-        List<ArrayEntity> found = repository.findBySpecification(new SumGreaterThanSpecification(10));
+        List<IntArrayEntity> found = repository.findBySpecification(new SumGreaterThanSpecification(10));
 
         assertEquals(1, found.size());
         assertEquals(largeSum, found.getFirst());
@@ -170,17 +171,17 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testFindBySpecificationNoMatch() {
-        ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
+        IntArrayEntity entity = factory.createArray(new Integer[] {1, 2, 3});
         repository.add(entity);
 
-        List<ArrayEntity> found = repository.findBySpecification(new IdSpecification(99999));
+        List<IntArrayEntity> found = repository.findBySpecification(new IdSpecification(99999));
 
         assertEquals(0, found.size());
     }
 
     @Test
     void testFindAllEmptyRepository() {
-        List<ArrayEntity> allEntities = repository.findAll();
+        List<IntArrayEntity> allEntities = repository.findAll();
 
         assertEquals(0, allEntities.size());
         assertTrue(allEntities.isEmpty());
@@ -188,15 +189,15 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testFindAllWithEntities() {
-        ArrayEntity entity1 = factory.createArray(new int[] {1, 2});
-        ArrayEntity entity2 = factory.createArray(new int[] {3, 4});
-        ArrayEntity entity3 = factory.createArray(new int[] {5, 6});
+        IntArrayEntity entity1 = factory.createArray(new Integer[] {1, 2});
+        IntArrayEntity entity2 = factory.createArray(new Integer[] {3, 4});
+        IntArrayEntity entity3 = factory.createArray(new Integer[] {5, 6});
 
         repository.add(entity1);
         repository.add(entity2);
         repository.add(entity3);
 
-        List<ArrayEntity> allEntities = repository.findAll();
+        List<IntArrayEntity> allEntities = repository.findAll();
 
         assertEquals(3, allEntities.size());
         assertTrue(allEntities.contains(entity1));
@@ -206,15 +207,15 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testSortById() {
-        ArrayEntity entity3 = factory.createArray(new int[] {7, 8, 9});
-        ArrayEntity entity1 = factory.createArray(new int[] {1, 2, 3});
-        ArrayEntity entity2 = factory.createArray(new int[] {4, 5, 6});
+        IntArrayEntity entity3 = factory.createArray(new Integer[] {7, 8, 9});
+        IntArrayEntity entity1 = factory.createArray(new Integer[] {1, 2, 3});
+        IntArrayEntity entity2 = factory.createArray(new Integer[] {4, 5, 6});
 
         repository.add(entity3);
         repository.add(entity1);
         repository.add(entity2);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.ID);
+        List<IntArrayEntity> sorted = repository.sortBy(ArrayComparator.ID);
 
         assertEquals(3, sorted.size());
         assertTrue(sorted.getFirst().getId() < sorted.get(1).getId());
@@ -223,15 +224,15 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testSortByName() {
-        ArrayEntity entityC = factory.createRandomArray("Charlie", 3, 1, 10);
-        ArrayEntity entityA = factory.createRandomArray("Alice", 3, 1, 10);
-        ArrayEntity entityB = factory.createRandomArray("Bob", 3, 1, 10);
+        IntArrayEntity entityC = factory.createRandomArray("Charlie", 3, 1, 10);
+        IntArrayEntity entityA = factory.createRandomArray("Alice", 3, 1, 10);
+        IntArrayEntity entityB = factory.createRandomArray("Bob", 3, 1, 10);
 
         repository.add(entityC);
         repository.add(entityA);
         repository.add(entityB);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.NAME);
+        List<IntArrayEntity> sorted = repository.sortBy(ArrayComparator.NAME);
 
         assertEquals(3, sorted.size());
         assertEquals("Alice", sorted.getFirst().getName());
@@ -241,15 +242,15 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testSortByFirstElement() {
-        ArrayEntity entity1 = factory.createArray(new int[] {5, 1, 1});
-        ArrayEntity entity2 = factory.createArray(new int[] {2, 2, 2});
-        ArrayEntity entity3 = factory.createArray(new int[] {8, 3, 3});
+        IntArrayEntity entity1 = factory.createArray(new Integer[] {5, 1, 1});
+        IntArrayEntity entity2 = factory.createArray(new Integer[] {2, 2, 2});
+        IntArrayEntity entity3 = factory.createArray(new Integer[] {8, 3, 3});
 
         repository.add(entity1);
         repository.add(entity2);
         repository.add(entity3);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.FIRST);
+        List<IntArrayEntity> sorted = repository.sortBy(ArrayComparator.FIRST);
 
         assertEquals(3, sorted.size());
         assertEquals(2, sorted.getFirst().getFirst());
@@ -259,15 +260,15 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testSortByLength() {
-        ArrayEntity shortArray = factory.createArray(new int[] {1});
-        ArrayEntity mediumArray = factory.createArray(new int[] {1, 2, 3});
-        ArrayEntity longArray = factory.createArray(new int[] {1, 2, 3, 4, 5});
+        IntArrayEntity shortArray = factory.createArray(new Integer[] {1});
+        IntArrayEntity mediumArray = factory.createArray(new Integer[] {1, 2, 3});
+        IntArrayEntity longArray = factory.createArray(new Integer[] {1, 2, 3, 4, 5});
 
         repository.add(longArray);
         repository.add(shortArray);
         repository.add(mediumArray);
 
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.LENGTH);
+        List<IntArrayEntity> sorted = repository.sortBy(ArrayComparator.LENGTH);
 
         assertEquals(3, sorted.size());
         assertEquals(1, sorted.getFirst().getLength());
@@ -277,7 +278,7 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testSortEmptyRepository() {
-        List<ArrayEntity> sorted = repository.sortBy(ArrayComparator.ID);
+        List<IntArrayEntity> sorted = repository.sortBy(ArrayComparator.ID);
 
         assertEquals(0, sorted.size());
         assertTrue(sorted.isEmpty());
@@ -285,8 +286,8 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testClearRepository() {
-        ArrayEntity entity1 = factory.createArray(new int[] {1, 2, 3});
-        ArrayEntity entity2 = factory.createArray(new int[] {4, 5, 6});
+        IntArrayEntity entity1 = factory.createArray(new Integer[] {1, 2, 3});
+        IntArrayEntity entity2 = factory.createArray(new Integer[] {4, 5, 6});
 
         repository.add(entity1);
         repository.add(entity2);
@@ -301,26 +302,24 @@ class InMemoryArrayRepositoryTest {
 
     @Test
     void testRepositoryObserverIntegration() {
-        ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
+        IntArrayEntity entity = factory.createArray(new Integer[] {1, 2, 3});
         repository.add(entity);
-        System.out.println(entity);
-        IntArrayStatistics initialStats = warehouse.getStatistics(entity.getId());
-        System.out.println(initialStats);
+        IntArrayStatistics initialStats = intWarehouse.getStatistics(entity.getId());
         assertEquals(6, initialStats.getSum());
 
         entity.setArray(0, 10);
 
-        IntArrayStatistics updatedStats = warehouse.getStatistics(entity.getId());
+        IntArrayStatistics updatedStats = intWarehouse.getStatistics(entity.getId());
         assertEquals(15, updatedStats.getSum());
     }
 
     @Test
     void testFindAllReturnsNewList() {
-        ArrayEntity entity = factory.createArray(new int[] {1, 2, 3});
+        IntArrayEntity entity = factory.createArray(new Integer[] {1, 2, 3});
         repository.add(entity);
 
-        List<ArrayEntity> list1 = repository.findAll();
-        List<ArrayEntity> list2 = repository.findAll();
+        List<IntArrayEntity> list1 = repository.findAll();
+        List<IntArrayEntity> list2 = repository.findAll();
 
         assertNotSame(list1, list2);
         assertEquals(list1, list2);

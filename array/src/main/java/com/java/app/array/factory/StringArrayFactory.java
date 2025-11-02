@@ -1,7 +1,7 @@
 package com.java.app.array.factory;
 
 import com.java.app.array.builder.StringArrayBuilder;
-import com.java.app.array.entity.StringArrayEntity;
+import com.java.app.array.entity.string.StringArrayEntity;
 import com.java.app.array.validator.ArrayValidator;
 
 import java.security.SecureRandom;

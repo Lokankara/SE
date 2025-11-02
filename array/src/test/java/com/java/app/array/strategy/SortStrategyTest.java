@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.factory.ArrayFactory;
+import com.java.app.array.entity.integer.IntArrayEntity;
+import com.java.app.array.factory.IntArrayFactory;
 import com.java.app.array.provider.SortStrategyArgumentsProvider;
 import com.java.app.array.provider.SortTestDataProvider;
 import com.java.app.array.service.ArraySortService;
@@ -24,44 +24,44 @@ import java.util.List;
 class SortStrategyTest {
 
     private ArraySortService sortService;
-    private ArrayFactory factory;
+    private IntArrayFactory factory;
 
     @BeforeEach
     void setUp() {
         sortService = new ArraySortService();
-        factory = new ArrayFactory();
+        factory = new IntArrayFactory();
     }
 
     @ParameterizedTest(name = "{0} should sort array correctly")
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
     @DisplayName("Each sort strategy produces correct results")
     void eachSortStrategyProducesCorrectResults(SortStrategy strategy) {
-        ArrayEntity unsorted = factory.createArray(new int[] {5, 2, 8, 1, 9});
-        List<ArrayEntity> arrays = List.of(unsorted);
+        IntArrayEntity unsorted = factory.createArray(new Integer[] {5, 2, 8, 1, 9});
+        List<IntArrayEntity> arrays = List.of(unsorted);
 
-        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+        List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
         assertNotNull(sorted);
         assertEquals(1, sorted.size());
-        ArrayEntity sortedEntity = sorted.getFirst();
-        int[] expectedSorted = {1, 2, 5, 8, 9};
+        IntArrayEntity sortedEntity = sorted.getFirst();
+        Integer[] expectedSorted = {1, 2, 5, 8, 9};
         assertArrayEquals(expectedSorted, sortedEntity.getArray());
     }
 
     @ParameterizedTest(name = "{0} with test data {1}")
     @ArgumentsSource(SortTestDataProvider.class)
     @DisplayName("All strategies produce consistent results for various data")
-    void allStrategiesProduceConsistentResultsForVariousData(String testName, int[] originalData,
-            int[] expectedSorted) {
-        ArrayEntity testArray = factory.createArray(originalData.clone());
-        List<ArrayEntity> arrays = List.of(testArray);
+    void allStrategiesProduceConsistentResultsForVariousData(String testName, Integer[] originalData,
+            Integer[] expectedSorted) {
+        IntArrayEntity testArray = factory.createArray(originalData.clone());
+        List<IntArrayEntity> arrays = List.of(testArray);
 
         for (SortStrategy strategy : SortStrategy.values()) {
-            List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+            List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
             assertNotNull(sorted);
             assertEquals(1, sorted.size());
-            ArrayEntity sortedEntity = sorted.getFirst();
+            IntArrayEntity sortedEntity = sorted.getFirst();
             assertArrayEquals(expectedSorted, sortedEntity.getArray(),
                     "Strategy " + strategy + " failed for " + testName);
         }
@@ -71,26 +71,26 @@ class SortStrategyTest {
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
     @DisplayName("Sort strategies preserve original arrays")
     void sortStrategiesPreserveOriginalArrays(SortStrategy strategy) {
-        int[] originalData = {9, 2, 7, 4, 1, 8};
-        ArrayEntity original = factory.createArray(originalData.clone());
-        List<ArrayEntity> arrays = List.of(original);
+        Integer[] originalData = {9, 2, 7, 4, 1, 8};
+        IntArrayEntity original = factory.createArray(originalData.clone());
+        List<IntArrayEntity> arrays = List.of(original);
 
         sortService.sort(arrays, strategy);
 
         assertArrayEquals(originalData, original.getArray());
     }
 
-    @ParameterizedTest(name = "{0} should create new ArrayEntity instances")
+    @ParameterizedTest(name = "{0} should create new IntArrayEntity instances")
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
-    @DisplayName("Sort strategies create new ArrayEntity instances")
-    void sortStrategiesCreateNewArrayEntityInstances(SortStrategy strategy) {
-        ArrayEntity original = factory.createArray(new int[] {3, 1, 4, 1, 5});
-        List<ArrayEntity> arrays = List.of(original);
+    @DisplayName("Sort strategies create new IntArrayEntity instances")
+    void sortStrategiesCreateNewIntArrayEntityInstances(SortStrategy strategy) {
+        IntArrayEntity original = factory.createArray(new Integer[] {3, 1, 4, 1, 5});
+        List<IntArrayEntity> arrays = List.of(original);
 
-        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+        List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
         assertEquals(1, sorted.size());
-        ArrayEntity sortedEntity = sorted.getFirst();
+        IntArrayEntity sortedEntity = sorted.getFirst();
         assertNotSame(original, sortedEntity);
         assertNotEquals(original.getId(), sortedEntity.getId());
     }
@@ -99,10 +99,10 @@ class SortStrategyTest {
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
     @DisplayName("Sort strategies handle empty arrays")
     void sortStrategiesHandleEmptyArrays(SortStrategy strategy) {
-        ArrayEntity emptyArray = factory.createArray(new int[] {});
-        List<ArrayEntity> arrays = List.of(emptyArray);
+        IntArrayEntity emptyArray = factory.createArray(new Integer[] {});
+        List<IntArrayEntity> arrays = List.of(emptyArray);
 
-        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+        List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
         assertNotNull(sorted);
         assertEquals(1, sorted.size());
@@ -114,55 +114,55 @@ class SortStrategyTest {
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
     @DisplayName("Sort strategies handle single element arrays")
     void sortStrategiesHandleSingleElementArrays(SortStrategy strategy) {
-        ArrayEntity singleElement = factory.createArray(new int[] {42});
-        List<ArrayEntity> arrays = List.of(singleElement);
+        IntArrayEntity singleElement = factory.createArray(new Integer[] {42});
+        List<IntArrayEntity> arrays = List.of(singleElement);
 
-        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+        List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
         assertEquals(1, sorted.size());
-        ArrayEntity sortedEntity = sorted.getFirst();
+        IntArrayEntity sortedEntity = sorted.getFirst();
         assertEquals(1, sortedEntity.getLength());
         assertEquals(42, sortedEntity.getFirst());
-        assertArrayEquals(new int[] {42}, sortedEntity.getArray());
+        assertArrayEquals(new Integer[] {42}, sortedEntity.getArray());
     }
 
     @ParameterizedTest(name = "{0} should handle already sorted arrays")
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
     @DisplayName("Sort strategies handle already sorted arrays")
     void sortStrategiesHandleAlreadySortedArrays(SortStrategy strategy) {
-        ArrayEntity alreadySorted = factory.createArray(new int[] {1, 2, 3, 4, 5});
-        List<ArrayEntity> arrays = List.of(alreadySorted);
+        IntArrayEntity alreadySorted = factory.createArray(new Integer[] {1, 2, 3, 4, 5});
+        List<IntArrayEntity> arrays = List.of(alreadySorted);
 
-        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+        List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
         assertEquals(1, sorted.size());
-        assertArrayEquals(new int[] {1, 2, 3, 4, 5}, sorted.getFirst().getArray());
+        assertArrayEquals(new Integer[] {1, 2, 3, 4, 5}, sorted.getFirst().getArray());
     }
 
     @ParameterizedTest(name = "{0} should handle reverse sorted arrays")
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
     @DisplayName("Sort strategies handle reverse sorted arrays")
     void sortStrategiesHandleReverseSortedArrays(SortStrategy strategy) {
-        ArrayEntity reverseSorted = factory.createArray(new int[] {5, 4, 3, 2, 1});
-        List<ArrayEntity> arrays = List.of(reverseSorted);
+        IntArrayEntity reverseSorted = factory.createArray(new Integer[] {5, 4, 3, 2, 1});
+        List<IntArrayEntity> arrays = List.of(reverseSorted);
 
-        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+        List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
         assertEquals(1, sorted.size());
-        assertArrayEquals(new int[] {1, 2, 3, 4, 5}, sorted.getFirst().getArray());
+        assertArrayEquals(new Integer[] {1, 2, 3, 4, 5}, sorted.getFirst().getArray());
     }
 
     @ParameterizedTest(name = "{0} should handle arrays with negative numbers")
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
     @DisplayName("Sort strategies handle arrays with negative numbers")
     void sortStrategiesHandleArraysWithNegativeNumbers(SortStrategy strategy) {
-        ArrayEntity withNegatives = factory.createArray(new int[] {-5, 3, -1, 0, 2, -3});
-        List<ArrayEntity> arrays = List.of(withNegatives);
+        IntArrayEntity withNegatives = factory.createArray(new Integer[] {-5, 3, -1, 0, 2, -3});
+        List<IntArrayEntity> arrays = List.of(withNegatives);
 
-        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+        List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
         assertEquals(1, sorted.size());
-        int[] expectedSorted = {-5, -3, -1, 0, 2, 3};
+        Integer[] expectedSorted = {-5, -3, -1, 0, 2, 3};
         assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
     }
 
@@ -170,30 +170,30 @@ class SortStrategyTest {
     @ArgumentsSource(SortStrategyArgumentsProvider.class)
     @DisplayName("Sort strategies handle arrays with extreme values")
     void sortStrategiesHandleArraysWithExtremeValues(SortStrategy strategy) {
-        ArrayEntity extremeValues = factory.createArray(new int[] {Integer.MAX_VALUE, Integer.MIN_VALUE, 0});
-        List<ArrayEntity> arrays = List.of(extremeValues);
+        IntArrayEntity extremeValues = factory.createArray(new Integer[] {Integer.MAX_VALUE, Integer.MIN_VALUE, 0});
+        List<IntArrayEntity> arrays = List.of(extremeValues);
 
-        List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+        List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
         assertEquals(1, sorted.size());
-        int[] expectedSorted = {Integer.MIN_VALUE, 0, Integer.MAX_VALUE};
+        Integer[] expectedSorted = {Integer.MIN_VALUE, 0, Integer.MAX_VALUE};
         assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
     }
 
     @Test
     @DisplayName("All strategies produce identical results for same input")
     void allStrategiesProduceIdenticalResultsForSameInput() {
-        int[] testData = {15, 3, 9, 1, 12, 6};
-        ArrayEntity testArray = factory.createArray(testData.clone());
-        List<ArrayEntity> arrays = List.of(testArray);
+        Integer[] testData = {15, 3, 9, 1, 12, 6};
+        IntArrayEntity testArray = factory.createArray(testData.clone());
+        List<IntArrayEntity> arrays = List.of(testArray);
 
-        List<ArrayEntity> mergeResult = sortService.sort(arrays, SortStrategy.MERGE);
-        List<ArrayEntity> heapResult = sortService.sort(arrays, SortStrategy.HEAP);
-        List<ArrayEntity> insertionResult = sortService.sort(arrays, SortStrategy.INSERTION);
-        List<ArrayEntity> selectionResult = sortService.sort(arrays, SortStrategy.SELECTION);
-        List<ArrayEntity> bubbleResult = sortService.sort(arrays, SortStrategy.BUBBLE);
+        List<IntArrayEntity> mergeResult = sortService.sort(arrays, SortStrategy.MERGE);
+        List<IntArrayEntity> heapResult = sortService.sort(arrays, SortStrategy.HEAP);
+        List<IntArrayEntity> insertionResult = sortService.sort(arrays, SortStrategy.INSERTION);
+        List<IntArrayEntity> selectionResult = sortService.sort(arrays, SortStrategy.SELECTION);
+        List<IntArrayEntity> bubbleResult = sortService.sort(arrays, SortStrategy.BUBBLE);
 
-        int[] mergeArray = mergeResult.getFirst().getArray();
+        Integer[] mergeArray = mergeResult.getFirst().getArray();
         assertArrayEquals(mergeArray, heapResult.getFirst().getArray());
         assertArrayEquals(mergeArray, insertionResult.getFirst().getArray());
         assertArrayEquals(mergeArray, selectionResult.getFirst().getArray());
@@ -205,7 +205,7 @@ class SortStrategyTest {
     void sortServiceHandlesNullAndEmptyLists() {
         for (SortStrategy strategy : SortStrategy.values()) {
             assertNull(sortService.sort(null, strategy));
-            List<ArrayEntity> emptyResult = sortService.sort(List.of(), strategy);
+            List<IntArrayEntity> emptyResult = sortService.sort(List.of(), strategy);
             assertNotNull(emptyResult);
             assertTrue(emptyResult.isEmpty());
         }
@@ -235,12 +235,12 @@ class SortStrategyTest {
     @Test
     @DisplayName("Sequential arrays work with different strategies")
     void sequentialArraysWorkWithDifferentStrategies() {
-        ArrayEntity sequential = factory.createSequentialArray("SeqTest", 5, 10);
-        List<ArrayEntity> arrays = List.of(sequential);
-        int[] expectedSorted = {5, 6, 7, 8, 9, 10};
+        IntArrayEntity sequential = factory.createSequentialArray("SeqTest", 5, 10);
+        List<IntArrayEntity> arrays = List.of(sequential);
+        Integer[] expectedSorted = {5, 6, 7, 8, 9, 10};
 
         for (SortStrategy strategy : SortStrategy.values()) {
-            List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+            List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
             assertEquals(1, sorted.size());
             assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
         }
@@ -249,12 +249,12 @@ class SortStrategyTest {
     @Test
     @DisplayName("Pattern arrays work with different strategies")
     void patternArraysWorkWithDifferentStrategies() {
-        ArrayEntity pattern = factory.createArrayWithPattern("PatternTest", 5, 10, -2);
-        List<ArrayEntity> arrays = List.of(pattern);
-        int[] expectedSorted = {2, 4, 6, 8, 10};
+        IntArrayEntity pattern = factory.createArrayWithPattern("PatternTest", 5, 10, -2);
+        List<IntArrayEntity> arrays = List.of(pattern);
+        Integer[] expectedSorted = {2, 4, 6, 8, 10};
 
         for (SortStrategy strategy : SortStrategy.values()) {
-            List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+            List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
             assertEquals(1, sorted.size());
             assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
         }
@@ -263,12 +263,12 @@ class SortStrategyTest {
     @Test
     @DisplayName("Range arrays work with different strategies")
     void rangeArraysWorkWithDifferentStrategies() {
-        ArrayEntity range = factory.createArrayFromRange("RangeTest", 20, 10, -3);
-        List<ArrayEntity> arrays = List.of(range);
-        int[] expectedSorted = {11, 14, 17, 20};
+        IntArrayEntity range = factory.createArrayFromRange("RangeTest", 20, 10, -3);
+        List<IntArrayEntity> arrays = List.of(range);
+        Integer[] expectedSorted = {11, 14, 17, 20};
 
         for (SortStrategy strategy : SortStrategy.values()) {
-            List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+            List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
             assertEquals(1, sorted.size());
             assertArrayEquals(expectedSorted, sorted.getFirst().getArray());
         }
@@ -277,20 +277,20 @@ class SortStrategyTest {
     @Test
     @DisplayName("Large arrays are sorted correctly")
     void largeArraysAreSortedCorrectly() {
-        ArrayEntity largeArray = factory.createRandomArray("LargeTest", 100, 1, 1000);
-        List<ArrayEntity> arrays = List.of(largeArray);
+        IntArrayEntity largeArray = factory.createRandomArray("LargeTest", 100, 1, 1000);
+        List<IntArrayEntity> arrays = List.of(largeArray);
 
         for (SortStrategy strategy : SortStrategy.values()) {
-            List<ArrayEntity> sorted = sortService.sort(arrays, strategy);
+            List<IntArrayEntity> sorted = sortService.sort(arrays, strategy);
 
             assertEquals(1, sorted.size());
-            ArrayEntity sortedEntity = sorted.getFirst();
+            IntArrayEntity sortedEntity = sorted.getFirst();
             assertEquals(100, sortedEntity.getLength());
             assertTrue(isSorted(sortedEntity.getArray()));
         }
     }
 
-    private boolean isSorted(int[] array) {
+    private boolean isSorted(Integer[] array) {
         for (int i = 1; i < array.length; i++) {
             if (array[i] < array[i - 1]) {
                 return false;

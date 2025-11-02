@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByIdReturnsEmptyListWhenNoArrays() {
-        List<ArrayEntity> result = searchService.findById(1);
+        List<IntArrayEntity> result = searchService.findById(1);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -32,7 +32,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByIdWithNegativeId() {
-        List<ArrayEntity> result = searchService.findById(-1);
+        List<IntArrayEntity> result = searchService.findById(-1);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -40,7 +40,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByIdWithZeroId() {
-        List<ArrayEntity> result = searchService.findById(0);
+        List<IntArrayEntity> result = searchService.findById(0);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -48,7 +48,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByIdWithLargeId() {
-        List<ArrayEntity> result = searchService.findById(Integer.MAX_VALUE);
+        List<IntArrayEntity> result = searchService.findById(Integer.MAX_VALUE);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -56,7 +56,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByNameReturnsEmptyListWhenNoArrays() {
-        List<ArrayEntity> result = searchService.findByName("TestArray");
+        List<IntArrayEntity> result = searchService.findByName("TestArray");
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -69,7 +69,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByNameWithEmptyString() {
-        List<ArrayEntity> result = searchService.findByName("");
+        List<IntArrayEntity> result = searchService.findByName("");
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -77,7 +77,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByNameWithSpecialCharacters() {
-        List<ArrayEntity> result = searchService.findByName("Test@Array#123");
+        List<IntArrayEntity> result = searchService.findByName("Test@Array#123");
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -86,7 +86,7 @@ class SearchServiceTest {
     @Test
     void testFindByNameWithLongString() {
         String longName = "A".repeat(1000);
-        List<ArrayEntity> result = searchService.findByName(longName);
+        List<IntArrayEntity> result = searchService.findByName(longName);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -94,7 +94,7 @@ class SearchServiceTest {
 
     @Test
     void testFindBySumGreaterThanReturnsEmptyListWhenNoArrays() {
-        List<ArrayEntity> result = searchService.findBySumGreaterThan(10);
+        List<IntArrayEntity> result = searchService.findBySumGreaterThan(10);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -102,7 +102,7 @@ class SearchServiceTest {
 
     @Test
     void testFindBySumGreaterThanWithZeroThreshold() {
-        List<ArrayEntity> result = searchService.findBySumGreaterThan(0);
+        List<IntArrayEntity> result = searchService.findBySumGreaterThan(0);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -110,7 +110,7 @@ class SearchServiceTest {
 
     @Test
     void testFindBySumGreaterThanWithNegativeThreshold() {
-        List<ArrayEntity> result = searchService.findBySumGreaterThan(-100);
+        List<IntArrayEntity> result = searchService.findBySumGreaterThan(-100);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -118,7 +118,7 @@ class SearchServiceTest {
 
     @Test
     void testFindBySumGreaterThanWithLargeThreshold() {
-        List<ArrayEntity> result = searchService.findBySumGreaterThan(Integer.MAX_VALUE);
+        List<IntArrayEntity> result = searchService.findBySumGreaterThan(Integer.MAX_VALUE);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -126,7 +126,7 @@ class SearchServiceTest {
 
     @Test
     void testFindBySumLessThanReturnsEmptyListWhenNoArrays() {
-        List<ArrayEntity> result = searchService.findBySumLessThan(100);
+        List<IntArrayEntity> result = searchService.findBySumLessThan(100);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -134,7 +134,7 @@ class SearchServiceTest {
 
     @Test
     void testFindBySumLessThanWithZeroThreshold() {
-        List<ArrayEntity> result = searchService.findBySumLessThan(0);
+        List<IntArrayEntity> result = searchService.findBySumLessThan(0);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -142,7 +142,7 @@ class SearchServiceTest {
 
     @Test
     void testFindBySumLessThanWithNegativeThreshold() {
-        List<ArrayEntity> result = searchService.findBySumLessThan(-50);
+        List<IntArrayEntity> result = searchService.findBySumLessThan(-50);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -150,7 +150,7 @@ class SearchServiceTest {
 
     @Test
     void testFindBySumLessThanWithMaxValue() {
-        List<ArrayEntity> result = searchService.findBySumLessThan(Integer.MAX_VALUE);
+        List<IntArrayEntity> result = searchService.findBySumLessThan(Integer.MAX_VALUE);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -158,7 +158,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByAverageGreaterThanReturnsEmptyListWhenNoArrays() {
-        List<ArrayEntity> result = searchService.findByAverageGreaterThan(5.0);
+        List<IntArrayEntity> result = searchService.findByAverageGreaterThan(5.0);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -166,7 +166,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByAverageGreaterThanWithZeroThreshold() {
-        List<ArrayEntity> result = searchService.findByAverageGreaterThan(0.0);
+        List<IntArrayEntity> result = searchService.findByAverageGreaterThan(0.0);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -174,7 +174,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByAverageGreaterThanWithNegativeThreshold() {
-        List<ArrayEntity> result = searchService.findByAverageGreaterThan(-10.5);
+        List<IntArrayEntity> result = searchService.findByAverageGreaterThan(-10.5);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -182,7 +182,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByAverageGreaterThanWithVerySmallThreshold() {
-        List<ArrayEntity> result = searchService.findByAverageGreaterThan(0.001);
+        List<IntArrayEntity> result = searchService.findByAverageGreaterThan(0.001);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -190,7 +190,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByAverageGreaterThanWithLargeThreshold() {
-        List<ArrayEntity> result = searchService.findByAverageGreaterThan(1000000.0);
+        List<IntArrayEntity> result = searchService.findByAverageGreaterThan(1000000.0);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -198,7 +198,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByMaxGreaterThanReturnsEmptyListWhenNoArrays() {
-        List<ArrayEntity> result = searchService.findByMaxGreaterThan(50);
+        List<IntArrayEntity> result = searchService.findByMaxGreaterThan(50);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -206,7 +206,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByMaxGreaterThanWithZeroThreshold() {
-        List<ArrayEntity> result = searchService.findByMaxGreaterThan(0);
+        List<IntArrayEntity> result = searchService.findByMaxGreaterThan(0);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -214,7 +214,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByMaxGreaterThanWithNegativeThreshold() {
-        List<ArrayEntity> result = searchService.findByMaxGreaterThan(-25);
+        List<IntArrayEntity> result = searchService.findByMaxGreaterThan(-25);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -222,7 +222,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByMaxGreaterThanWithMinValue() {
-        List<ArrayEntity> result = searchService.findByMaxGreaterThan(Integer.MIN_VALUE);
+        List<IntArrayEntity> result = searchService.findByMaxGreaterThan(Integer.MIN_VALUE);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -230,7 +230,7 @@ class SearchServiceTest {
 
     @Test
     void testFindByMaxGreaterThanWithMaxValue() {
-        List<ArrayEntity> result = searchService.findByMaxGreaterThan(Integer.MAX_VALUE);
+        List<IntArrayEntity> result = searchService.findByMaxGreaterThan(Integer.MAX_VALUE);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -248,12 +248,12 @@ class SearchServiceTest {
 
     @Test
     void testSearchMethodsWithBoundaryValues() {
-        List<ArrayEntity> result1 = searchService.findById(Integer.MIN_VALUE);
-        List<ArrayEntity> result2 = searchService.findById(Integer.MAX_VALUE);
-        List<ArrayEntity> result3 = searchService.findBySumGreaterThan(Integer.MIN_VALUE);
-        List<ArrayEntity> result4 = searchService.findBySumGreaterThan(Integer.MAX_VALUE);
-        List<ArrayEntity> result5 = searchService.findByAverageGreaterThan(Double.MIN_VALUE);
-        List<ArrayEntity> result6 = searchService.findByAverageGreaterThan(Double.MAX_VALUE);
+        List<IntArrayEntity> result1 = searchService.findById(Integer.MIN_VALUE);
+        List<IntArrayEntity> result2 = searchService.findById(Integer.MAX_VALUE);
+        List<IntArrayEntity> result3 = searchService.findBySumGreaterThan(Integer.MIN_VALUE);
+        List<IntArrayEntity> result4 = searchService.findBySumGreaterThan(Integer.MAX_VALUE);
+        List<IntArrayEntity> result5 = searchService.findByAverageGreaterThan(Double.MIN_VALUE);
+        List<IntArrayEntity> result6 = searchService.findByAverageGreaterThan(Double.MAX_VALUE);
 
         assertNotNull(result1);
         assertNotNull(result2);
@@ -272,8 +272,8 @@ class SearchServiceTest {
 
     @Test
     void testConsecutiveSearchCallsReturnConsistentResults() {
-        List<ArrayEntity> result1 = searchService.findById(1);
-        List<ArrayEntity> result2 = searchService.findById(1);
+        List<IntArrayEntity> result1 = searchService.findById(1);
+        List<IntArrayEntity> result2 = searchService.findById(1);
 
         assertEquals(result1.size(), result2.size());
         assertEquals(result1, result2);
@@ -291,8 +291,8 @@ class SearchServiceTest {
 
     @Test
     void testSearchMethodsReturnNewListInstances() {
-        List<ArrayEntity> result1 = searchService.findById(1);
-        List<ArrayEntity> result2 = searchService.findById(1);
+        List<IntArrayEntity> result1 = searchService.findById(1);
+        List<IntArrayEntity> result2 = searchService.findById(1);
 
         assertSame(result1, result2);
     }
@@ -325,12 +325,12 @@ class SearchServiceTest {
         int iterations = 100;
 
         for (int i = 0; i < iterations; i++) {
-            List<ArrayEntity> result = searchService.findById(i);
+            List<IntArrayEntity> result = searchService.findById(i);
             assertTrue(result.isEmpty());
         }
 
         for (int i = 0; i < iterations; i++) {
-            List<ArrayEntity> result = searchService.findBySumGreaterThan(i);
+            List<IntArrayEntity> result = searchService.findBySumGreaterThan(i);
             assertTrue(result.isEmpty());
         }
     }
@@ -355,8 +355,8 @@ class SearchServiceTest {
     void testSearchServiceInstanceIndependence() {
         SearchService anotherSearchService = new SearchService();
 
-        List<ArrayEntity> result1 = searchService.findById(1);
-        List<ArrayEntity> result2 = anotherSearchService.findById(1);
+        List<IntArrayEntity> result1 = searchService.findById(1);
+        List<IntArrayEntity> result2 = anotherSearchService.findById(1);
 
         assertEquals(result1.size(), result2.size());
         assertTrue(result1.isEmpty());

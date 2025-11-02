@@ -1,7 +1,7 @@
 package com.java.app.array.dao;
 
 import com.java.app.array.converter.ArrayConverter;
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 import com.java.app.array.exception.FileReadException;
 import com.java.app.array.exception.InvalidArrayDataException;
 import com.java.app.array.reader.FileArrayReader;
@@ -23,13 +23,13 @@ public class FileArrayRepository {
         this.converter = converter;
     }
 
-    public List<ArrayEntity> readArrays(String resourcePath) throws FileReadException {
-        List<ArrayEntity> arrays = new ArrayList<>();
+    public List<IntArrayEntity> readArrays(String resourcePath) throws FileReadException {
+        List<IntArrayEntity> arrays = new ArrayList<>();
         List<String> lines = reader.readLines(resourcePath);
         for (int i = 0; i < lines.size(); i++) {
             try {
-                int[] array = converter.parseToArray(lines.get(i));
-                arrays.add(new ArrayEntity(array));
+                Integer[] array = converter.parseToArray(lines.get(i));
+                arrays.add(new IntArrayEntity(array));
             } catch (InvalidArrayDataException e) {
                 errorMap.put(i + 1, lines.get(i));
             }

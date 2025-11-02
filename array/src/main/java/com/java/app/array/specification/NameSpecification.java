@@ -1,9 +1,9 @@
 package com.java.app.array.specification;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 import com.java.app.array.validator.ArrayValidator;
 
-public class NameSpecification implements Specification<ArrayEntity> {
+public class NameSpecification implements Specification<IntArrayEntity> {
     private final String targetName;
 
     public NameSpecification(String targetName) {
@@ -12,7 +12,7 @@ public class NameSpecification implements Specification<ArrayEntity> {
     }
 
     @Override
-    public boolean specify(ArrayEntity entity) {
+    public boolean specify(IntArrayEntity entity) {
         return entity.getName().equals(targetName);
     }
 }

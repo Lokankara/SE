@@ -1,6 +1,6 @@
 package com.java.app.array.validator;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -21,7 +21,7 @@ public class ArrayValidator {
 
     public static void validate(boolean condition, String message) {
         if (condition) {
-            throw new IllegalStateException(message);
+            throw new IllegalArgumentException(message);
         }
     }
 
@@ -33,7 +33,7 @@ public class ArrayValidator {
         return Pattern.matches(VALID_ARRAY_REGEX, line);
     }
 
-    public Optional<int[]> checkAndGet(ArrayEntity arrayEntity) {
+    public Optional<Integer[]> checkAndGet(IntArrayEntity arrayEntity) {
         return arrayEntity == null || arrayEntity.isEmpty()
                 ? Optional.empty()
                 : Optional.of(arrayEntity.getArray());

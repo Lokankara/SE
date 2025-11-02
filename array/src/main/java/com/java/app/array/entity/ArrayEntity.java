@@ -1,38 +1,39 @@
 package com.java.app.array.entity;
 
 import com.java.app.array.observer.ArrayObservable;
+import com.java.app.array.observer.Listener;
 import com.java.app.array.validator.ArrayValidator;
 
 import java.util.Arrays;
 
-public final class ArrayEntity {
+public abstract class ArrayEntity<T> {
 
     private final int id;
+    private final T[] array;
     private final String name;
-    private final int[] array;
-    private final ArrayObservable observable = new ArrayObservable();
+    private final ArrayObservable<T> observable = new ArrayObservable<>();
 
-    public ArrayEntity() {
+    protected abstract T[] getEmptyArray();
+
+    protected ArrayEntity() {
         this.id = 0;
         this.name = "";
-        this.array = updateState(new int[0]);
-    }
-
-    private int[] updateState(int[] ints) {
+        this.array = getEmptyArray();
         observable.notifyListeners(this);
-        return ArrayValidator.getIfNull(ints.clone(), new int[0]);
     }
 
-    public ArrayEntity(int id, String name, int[] array) {
+    protected ArrayEntity(T[] array) {
+        this.id = 0;
+        this.name = "";
+        this.array = ArrayValidator.getIfNull(array.clone(), array);
+        observable.notifyListeners(this);
+    }
+
+    protected ArrayEntity(int id, String name, T[] array) {
         this.id = id;
         this.name = name;
-        this.array = updateState(array);
-    }
-
-    public ArrayEntity(int[] array) {
-        this.id = 0;
-        this.name = "";
-        this.array = updateState(array);
+        this.array = ArrayValidator.getIfNull(array.clone(), getEmptyArray());
+        observable.notifyListeners(this);
     }
 
     public int getId() {
@@ -47,7 +48,7 @@ public final class ArrayEntity {
         return array.length;
     }
 
-    public int[] getArray() {
+    public T[] getArray() {
         return array.clone();
     }
 
@@ -55,14 +56,22 @@ public final class ArrayEntity {
         return array.length == 0;
     }
 
-    public int getFirst() {
+    public T getFirst() {
         return array[0];
     }
 
-    public void setArray(int index, int value) {
-        ArrayValidator.validate(index < 0 || index >= array.length, "Size out of range");
+    public void setArray(int index, T value) {
+        ArrayValidator.validate(index < 0 || index >= getArray().length, "Size out of range");
         array[index] = value;
         observable.notifyListeners(this);
+    }
+
+    public void attach(Listener<ArrayEntity<T>> warehouse) {
+        observable.attach(warehouse);
+    }
+
+    public void removeListener(Listener<ArrayEntity<T>> warehouse) {
+        observable.removeListener(warehouse);
     }
 
     @Override
@@ -70,8 +79,9 @@ public final class ArrayEntity {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        ArrayEntity that = (ArrayEntity) o;
-        return id == that.id && name.equals(that.name)
+        ArrayEntity<?> that = (ArrayEntity<?>) o;
+        return id == that.id
+                && name.equals(that.name)
                 && Arrays.equals(array, that.array);
     }
 
@@ -85,15 +95,7 @@ public final class ArrayEntity {
 
     @Override
     public String toString() {
-        return String.format("IntArrayEntity{id=%d, name='%s', array=%s}",
+        return String.format("ArrayEntity{id=%d, name='%s', array=%s}",
                 id, name, Arrays.toString(array));
-    }
-
-    public void attach(Warehouse warehouse) {
-        observable.attach(warehouse);
-    }
-
-    public void removeListener(Warehouse warehouse) {
-            observable.removeListener(warehouse);
     }
 }

@@ -1,16 +1,17 @@
 package com.java.app.array.strategy.algorithm;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 import com.java.app.array.strategy.SortAlgorithm;
+
+import java.util.stream.IntStream;
 
 public class HeapSort extends SortAlgorithm {
 
     @Override
-    public ArrayEntity sort(int[] array) {
+    public IntArrayEntity sort(Integer[] array) {
         int n = array.length;
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heap(array, n, i);
-        }
+        IntStream.iterate(n / 2 - 1, i -> i >= 0, i -> i - 1)
+                .forEach(i -> heap(array, n, i));
         for (int i = n - 1; i > 0; i--) {
             int temp = array[0];
             array[0] = array[i];
@@ -20,7 +21,7 @@ public class HeapSort extends SortAlgorithm {
         return getFactory().createArray(array);
     }
 
-    private void heap(int[] array, int n, int i) {
+    private void heap(Integer[] array, int n, int i) {
         int largest = i;
         int left = 2 * i + 1;
         int right = 2 * i + 2;

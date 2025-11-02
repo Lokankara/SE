@@ -1,36 +1,36 @@
 package com.java.app.array.dao;
 
-import com.java.app.array.comparator.ArrayComparator;
-import com.java.app.array.entity.ArrayEntity;
-import com.java.app.array.entity.Warehouse;
+import com.java.app.array.entity.integer.IntArrayEntity;
+import com.java.app.array.entity.integer.IntWarehouse;
 import com.java.app.array.specification.Specification;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
+public class InMemoryArrayRepository implements ArrayRepository<IntArrayEntity> {
 
-    private final Warehouse warehouse;
-    private final List<ArrayEntity> entities;
+    private final IntWarehouse intWarehouse;
+    private final List<IntArrayEntity> entities;
 
     public InMemoryArrayRepository() {
-        this.warehouse = Warehouse.getInstance();
+        this.intWarehouse = IntWarehouse.getInstance();
         this.entities = new ArrayList<>();
     }
 
     @Override
-    public void add(ArrayEntity entity) {
+    public void add(IntArrayEntity entity) {
         entities.add(entity);
-        entity.attach(warehouse);
-        warehouse.onChanged(entity);
+        entity.attach(intWarehouse);
+        intWarehouse.onChanged(entity);
     }
 
     @Override
-    public void remove(ArrayEntity entity) {
+    public void remove(IntArrayEntity entity) {
         entities.remove(entity);
-        entity.removeListener(warehouse);
-        warehouse.removeStatistics(entity.getId());
+        entity.removeListener(intWarehouse);
+        intWarehouse.removeStatistics(entity.getId());
     }
 
     @Override
@@ -41,8 +41,8 @@ public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
     }
 
     @Override
-    public List<ArrayEntity> findBySpecification(
-            Specification<ArrayEntity> specification) {
+    public List<IntArrayEntity> findBySpecification(
+            Specification<IntArrayEntity> specification) {
 
         return entities.stream()
                 .filter(specification::specify)
@@ -50,26 +50,25 @@ public class InMemoryArrayRepository implements ArrayRepository<ArrayEntity> {
     }
 
     @Override
-    public List<ArrayEntity> findAll() {
+    public List<IntArrayEntity> findAll() {
         return new ArrayList<>(entities);
     }
 
-    @Override
-    public List<ArrayEntity> sortBy(ArrayComparator comparator) {
+    public List<IntArrayEntity> sortBy(Comparator<IntArrayEntity> comparator) {
         return entities.stream()
-                .sorted(comparator.getComparator())
+                .sorted(comparator)
                 .toList();
     }
 
     @Override
-    public List<ArrayEntity> queryStream(Specification<ArrayEntity> specification) {
+    public List<IntArrayEntity> queryStream(Specification<IntArrayEntity> specification) {
         return entities.stream()
                 .filter(specification::specify)
                 .toList();
     }
 
     @Override
-    public List<ArrayEntity> queryPredicate(Predicate<ArrayEntity> predicate) {
+    public List<IntArrayEntity> queryPredicate(Predicate<IntArrayEntity> predicate) {
         return entities.stream()
                 .filter(predicate)
                 .toList();

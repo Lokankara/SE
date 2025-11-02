@@ -1,18 +1,18 @@
 package com.java.app.array.service;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 
 import java.util.function.IntPredicate;
 
 public interface CalculateService {
 
-    long count(ArrayEntity arrayEntity, IntPredicate intPredicate);
+    long count(IntArrayEntity arrayEntity, IntPredicate intPredicate);
 
-    int min(ArrayEntity array);
+    int min(IntArrayEntity array);
 
-    int max(ArrayEntity array);
+    int max(IntArrayEntity array);
 
-    double average(ArrayEntity array);
+    double average(IntArrayEntity array);
 
-    long sum(ArrayEntity array);
+    long sum(IntArrayEntity array);
 }

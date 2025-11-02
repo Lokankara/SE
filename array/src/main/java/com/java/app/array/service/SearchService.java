@@ -1,6 +1,6 @@
 package com.java.app.array.service;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 import com.java.app.array.specification.AverageGreaterThanSpecification;
 import com.java.app.array.specification.IdSpecification;
 import com.java.app.array.specification.MaxGreaterThanSpecification;
@@ -17,27 +17,27 @@ public class SearchService {
         this.arrayService = new ArrayService();
     }
 
-    public List<ArrayEntity> findById(int id) {
+    public List<IntArrayEntity> findById(int id) {
         return arrayService.searchArrays(new IdSpecification(id));
     }
 
-    public List<ArrayEntity> findByName(String name) {
+    public List<IntArrayEntity> findByName(String name) {
         return arrayService.searchArrays(new NameSpecification(name));
     }
 
-    public List<ArrayEntity> findBySumGreaterThan(int threshold) {
+    public List<IntArrayEntity> findBySumGreaterThan(int threshold) {
         return arrayService.searchArrays(new SumGreaterThanSpecification(threshold));
     }
 
-    public List<ArrayEntity> findBySumLessThan(int threshold) {
+    public List<IntArrayEntity> findBySumLessThan(int threshold) {
         return arrayService.searchArrays(new SumLessThanSpecification(threshold));
     }
 
-    public List<ArrayEntity> findByAverageGreaterThan(double threshold) {
+    public List<IntArrayEntity> findByAverageGreaterThan(double threshold) {
         return arrayService.searchArrays(new AverageGreaterThanSpecification(threshold));
     }
 
-    public List<ArrayEntity> findByMaxGreaterThan(int threshold) {
+    public List<IntArrayEntity> findByMaxGreaterThan(int threshold) {
         return arrayService.searchArrays(new MaxGreaterThanSpecification(threshold));
     }
 }

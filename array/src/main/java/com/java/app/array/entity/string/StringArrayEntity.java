@@ -1,4 +1,4 @@
-package com.java.app.array.entity;
+package com.java.app.array.entity.string;
 
 import com.java.app.array.observer.ArrayObservable;
 
@@ -50,5 +50,13 @@ public class StringArrayEntity extends ArrayObservable {
     public String toString() {
         return String.format("StringArrayEntity{id=%d, name='%s', array=%s}",
                 id, name, Arrays.toString(array));
+    }
+
+    public String getFirst() {
+        return array[0];
+    }
+
+    public int getLength() {
+        return array.length;
     }
 }

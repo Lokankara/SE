@@ -7,16 +7,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class ArrayBuilder<T> {
 
     private String name;
-    private int[] values;
-    private final TriFunction<Integer, String, int[], T> creator;
+    private Integer[] values;
+    private final TriFunction<Integer, String, Integer[], T> creator;
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
-    public ArrayBuilder(TriFunction<Integer, String, int[], T> creator) {
-        this.creator = ArrayValidator.getOrThrow(creator);
+    public ArrayBuilder(TriFunction<Integer, String, Integer[], T> creator) {
+        this.creator = creator;
     }
 
-    public ArrayBuilder<T> setArray(int[] array) {
-        this.values = ArrayValidator.getIfNull(array.clone(), new int[0]);
+
+    public ArrayBuilder<T> setArray(Integer[] array) {
+        this.values = ArrayValidator.getIfNull(array.clone(), new Integer[0]);
         return this;
     }
 
@@ -26,6 +27,6 @@ public final class ArrayBuilder<T> {
     }
 
     public T build() {
-        return creator.apply(COUNTER.incrementAndGet(), name, ArrayValidator.getIfNull(values.clone(), new int[0]));
+        return creator.apply(COUNTER.incrementAndGet(), name, ArrayValidator.getIfNull(values.clone(), new Integer[0]));
     }
 }

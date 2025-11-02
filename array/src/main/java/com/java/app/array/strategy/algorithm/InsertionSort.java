@@ -1,12 +1,12 @@
 package com.java.app.array.strategy.algorithm;
 
-import com.java.app.array.entity.ArrayEntity;
+import com.java.app.array.entity.integer.IntArrayEntity;
 import com.java.app.array.strategy.SortAlgorithm;
 
 public class InsertionSort extends SortAlgorithm {
 
     @Override
-    public ArrayEntity sort(int[] array) {
+    public IntArrayEntity sort(Integer[] array) {
         for (int i = 1; i < array.length; i++) {
             int key = array[i];
             int j = i - 1;

@@ -5,6 +5,7 @@ import com.java.app.array.validator.ArrayValidator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StringArrayBuilder<T> {
+
     private String name;
     private String[] values;
     private final TriFunction<Integer, String, String[], T> creator;
