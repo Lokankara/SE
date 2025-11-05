@@ -1,3 +1,5 @@
 rootProject.name = 'app'
 
 include ':array'
+
+include 'text'

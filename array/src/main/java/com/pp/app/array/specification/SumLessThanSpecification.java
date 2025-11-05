@@ -1,0 +1,19 @@
+package com.pp.app.array.specification;
+
+import com.pp.app.array.entity.integer.IntArrayEntity;
+import com.pp.app.array.entity.integer.IntArrayStatistics;
+import com.pp.app.array.entity.integer.IntWarehouse;
+
+public class SumLessThanSpecification implements Specification<IntArrayEntity> {
+    private final int threshold;
+
+    public SumLessThanSpecification(int threshold) {
+        this.threshold = threshold;
+    }
+
+    @Override
+    public boolean specify(IntArrayEntity entity) {
+        IntArrayStatistics statistics = IntWarehouse.getInstance().getStatistics(entity.getId());
+        return statistics != null && statistics.getSum() < threshold;
+    }
+}
