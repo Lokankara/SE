@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 public class SwapLexemesProvider implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        Composite text1 = new Composite(ComponentType.LEXEME);
+        Composite text1 = new Composite(ComponentType.TEXT);
         Composite paragraph1 = new Composite(ComponentType.PARAGRAPH);
         Composite sentence1 = new Composite(ComponentType.SENTENCE);
         Composite lexeme1 = new Composite(ComponentType.LEXEME);
@@ -28,7 +28,7 @@ public class SwapLexemesProvider implements ArgumentsProvider {
         paragraph1.add(sentence1);
         text1.add(paragraph1);
 
-        Composite text2 = new Composite(ComponentType.LEXEME);
+        Composite text2 = new Composite(ComponentType.TEXT);
         Composite paragraph2 = new Composite(ComponentType.PARAGRAPH);
         Composite sentence2 = new Composite(ComponentType.SENTENCE);
         Composite lexeme3 = new Composite(ComponentType.LEXEME);
@@ -46,7 +46,7 @@ public class SwapLexemesProvider implements ArgumentsProvider {
         paragraph2.add(sentence2);
         text2.add(paragraph2);
 
-        Composite text3 = new Composite(ComponentType.LEXEME);
+        Composite text3 = new Composite(ComponentType.TEXT);
         Composite paragraph3 = new Composite(ComponentType.PARAGRAPH);
         Composite sentence3 = new Composite(ComponentType.SENTENCE);
         Composite lexeme5 = new Composite(ComponentType.LEXEME);
@@ -67,7 +67,7 @@ public class SwapLexemesProvider implements ArgumentsProvider {
         paragraph3.add(sentence3);
         text3.add(paragraph3);
 
-        Composite text4 = new Composite(ComponentType.LEXEME);
+        Composite text4 = new Composite(ComponentType.TEXT);
         Composite paragraph4 = new Composite(ComponentType.PARAGRAPH);
         Composite sentence4 = new Composite(ComponentType.SENTENCE);
         Composite lexeme8 = new Composite(ComponentType.LEXEME);
@@ -79,7 +79,7 @@ public class SwapLexemesProvider implements ArgumentsProvider {
         paragraph4.add(sentence4);
         text4.add(paragraph4);
 
-        Composite text5 = new Composite(ComponentType.LEXEME);
+        Composite text5 = new Composite(ComponentType.TEXT);
         Composite paragraph5 = new Composite(ComponentType.PARAGRAPH);
         Composite sentence5 = new Composite(ComponentType.SENTENCE);
         Composite lexeme10 = new Composite(ComponentType.LEXEME);
